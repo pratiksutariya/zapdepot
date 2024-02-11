@@ -272,7 +272,7 @@
                                       </div>
                                       <div>Google Sheet</div>
                                     </div>
-                                    <div
+                                    <!-- <div
                                       class="logo-box-one ml-2"
                                       :class="
                                         zap.sender_name == 'web_hook'
@@ -290,6 +290,25 @@
                                         />
                                       </div>
                                       <div>WebHooks</div>
+                                    </div> -->
+                                    <div
+                                      class="logo-box-one ml-2"
+                                      :class="
+                                        zap.sender_name == 'aweber'
+                                          ? 'active'
+                                          : ''
+                                      "
+                                      @click="set_sender('aweber')"
+                                    >
+                                      <div>
+                                        <img
+                                          class="img-set"
+                                          width="30"
+                                          height="30"
+                                          src="@/assets/images/aweber_2.png"
+                                        />
+                                      </div>
+                                      <div>AWeber</div>
                                     </div>
                                     <!-- ho -->
                                   </div>
@@ -357,6 +376,16 @@
                                action_type="zap.sender_action_type"
                                @set_tag_list_id="set_tag_list_id"
                                @set_account_id="set_account_id"
+                              />
+                              <AWeber
+                                v-if="zap.sender_name == 'aweber'"
+                                :getWebinarsAccounts="getWebinarsAccounts"
+                                :selected_account_id="zap.sender_id"
+                                event_type="trigger"
+                                :action_type="zap.sender_action_type"
+                                :selected_tag_list_id="zap.sender_tag_list_id"
+                                @set_tag_list_id="set_tag_list_id"
+                                @set_account_id="set_account_id"
                               />
                               <div>
                                 <!-- <div class="bold-make text-center">…and over 4,700+ more
@@ -591,6 +620,7 @@
                                       </div>
                                       <div>Google Sheet</div>
                                     </div>
+
                                     <!-- <div
                                       class="logo-box-one ml-2"
                                       :class="
@@ -610,7 +640,25 @@
                                       </div>
                                       <div>webHook</div>
                                     </div> -->
-                                    
+                                    <div
+                                      class="logo-box-one ml-2"
+                                      :class="
+                                        zap.sender_name == 'aweber'
+                                          ? 'active'
+                                          : ''
+                                      "
+                                      @click="set_receiver('aweber')"
+                                    >
+                                      <div>
+                                        <img
+                                          class="img-set"
+                                          width="30"
+                                          height="30"
+                                          src="@/assets/images/aweber_2.png"
+                                        />
+                                      </div>
+                                      <div>AWeber</div>
+                                    </div>
                                     <!-- ho -->
                                   </div>
                                 </div>
@@ -731,6 +779,7 @@ import GoHighLevelSingle from "@/components/integration/gohighlevelSingle.vue";
 import webinarAccount from "@/components/integration/webinarAccount.vue";
 import GoogleSheet from "@/components/integration/googleSheet.vue";
 import webHook from "@/components/integration/webHook.vue";
+import AWeber from "@/components/integration/AWeber.vue";
 import { useToast } from "vue-toastification";
 
 export default defineComponent({
@@ -746,7 +795,8 @@ export default defineComponent({
     GoHighLevelSingle,
     webinarAccount,
     GoogleSheet,
-    webHook
+    webHook,
+    AWeber
   },
   data() {
     return {

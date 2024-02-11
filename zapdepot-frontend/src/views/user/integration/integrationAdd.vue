@@ -23,6 +23,7 @@ export default defineComponent({
          ...mapActions({
             addAccountGo: "integration/addGohighlevelAccountSingle",
             addGoogleAccountauth: "integration/addGoogleAccountauth",
+            addAweberAccountauth: "integration/addAweberAccountauth",
             addGotoweninar: "integration/addGotoweninar",
          }),
          adddata(){
@@ -50,6 +51,25 @@ export default defineComponent({
              }
             this.loader = true;
             this.addGoogleAccountauth(this.data)
+                .then((response) => {
+                    this.loader = false;
+                    if (response.data.status == true) {
+                       this.toast.success("Account added successfully");
+                        this.$router.push({name: 'connectIntegration'})
+                    }
+                })
+                .catch((error) => {
+                    this.loader = false;
+                       this.toast.error(error.response.data.message);
+                        this.$router.push({name: 'connectIntegration'})
+                });
+         },
+         addAweberAccount(){
+             if(!this.data.state){
+                    this.$router.push({ name: "connectIntegration" });
+             }
+            this.loader = true;
+            this.addAweberAccountauth(this.data)
                 .then((response) => {
                     this.loader = false;
                     if (response.data.status == true) {
@@ -109,6 +129,8 @@ export default defineComponent({
                 this.addgotodata();
             } else if (this.$route.params.type=="googleAccount") {
                 this.addGoogleAccount();
+            } else if (this.$route.params.type=="aweber") {
+                this.addAweberAccount();
             }
         } else {
             this.$router.push({ name: "connectIntegration" });

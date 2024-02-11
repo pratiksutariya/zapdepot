@@ -443,11 +443,98 @@
                   </table>
                 </div>
               </div>
+
+              
               <!-- /.card-body -->
             </div>
+
+            
             <!-- /.card -->
             <!-- /.card -->
           </div>
+          
+        </div>
+      </div>
+      <div class="row mt-5">
+        <div class="col-md-12">
+          <div
+            class="card card-primary card-outline"
+            style="border-color: #E75F4D"
+          >
+            <div class="card-header">
+              <div class="row">
+                <div class="col-md-6">
+                  <div class="mail_box">
+                    <div class="active_icon"></div>
+                  </div>
+                  <div
+                    style="
+                      display: flex;
+                      position: absolute;
+                      margin-left: 2%;
+                      top: 8%;
+                    "
+                  >
+                    <img  style="width: 35px;margin-right: 10px; object-fit: contain;" src="../../../assets/images/aweber_2.png" alt="">
+                    <h2 style="margin: 0">AWeber Account</h2>
+                  </div>
+                </div>
+                <div class="col-md-6">
+                  <div class="float-right mr-3">
+                    <a
+                      type="button"
+                      href="javascript:void(0)"
+                      @click="aweberModel()"
+                      class="btn btn-block btn-outline-primary"
+                      ><i class="fas fa-plus pr-2"></i>Add Account</a
+                    >
+                  </div>
+                </div>
+              </div>
+              <hr />
+              <!-- /.card-header -->
+              <div class="card-body py-0">
+                <div class="table-responsive">
+                  <table class="table table-bordered">
+                    <thead>
+                      <tr>
+                        <th style="width: 10px">#</th>
+                        <th>Account Name</th>
+                        <th>Access Token</th>
+                        <th>Refresh Token</th>
+                        <th style="width: 50px">Action</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr  v-for="(get,index) in allGoogleAccounts" :key="index">
+                        <td>{{++index}}</td>
+                        <td>{{get.label}}</td>
+                        <td>{{get.access_token.substring(0, 50) + '***********'}}</td>
+                        <td>{{get.refresh_token.substring(0, 50) + '***********'}}</td>
+                        <td>
+                          <button
+                            class="btn btn-danger delete-btn"
+                            @click="deleteGotogoogle(get)"
+                            style="padding: 8px !important"
+                          >
+                            <i class="fas fa-trash-alt"></i>
+                          </button>
+                        </td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+
+              
+              <!-- /.card-body -->
+            </div>
+
+            
+            <!-- /.card -->
+            <!-- /.card -->
+          </div>
+          
         </div>
       </div>
     </div>
@@ -705,6 +792,51 @@
       </form>
     </template>
   </Model>
+
+  <Model
+    :modaltitle="modaltitle"
+    @close="aweberModelCLose()"
+    v-if="aweberPopUP"
+  >
+    <template #modal-logo>
+      <div class="image-box row">
+        <div class="col-12 custom-box">
+          <img
+            src="@/assets/images/aweber_2.png"
+            style="max-width: 250px"
+          />
+        </div>
+      </div>
+    </template>
+    <template #body>
+      <form @submit.prevent="connectWithAWeber()">
+        <div class="modal-body">
+          <div class="form-group">
+            <label for="prodcut_name">Enter Account Label</label>
+            <input
+              class="form-control"
+              placeholder="Enter Label"
+              :class="{
+                'is-invalid': v$.aweber.label.$errors.length,
+              }"
+              v-model="v$.aweber.label.$model"
+            />
+            <span
+              class="invalid-feedback"
+              role="alert"
+              v-for="(error, index) of v$.aweber.label.$errors"
+              :key="index"
+            >
+              <strong>{{ error.$message }}</strong>
+            </span>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="submit" class="btn btn-primary">Connect Account</button>
+        </div>
+      </form>
+    </template>
+  </Model>
 </template>
 
 <script>
@@ -734,6 +866,7 @@ export default {
             showgohilevel: false,
             showactive: false,
             googlePopUP: false,
+            aweberPopUP: false,
             showgohilevelSig: false,
             gohighlevel: {
                 label: "",
@@ -744,6 +877,9 @@ export default {
                 label: "",
             },
             google : {
+              label: ""
+            },
+            aweber : {
               label: ""
             },
             activeCam: {
@@ -784,6 +920,11 @@ export default {
                 },
             },
             google : {
+              label: {
+                    required
+                },
+            },
+            aweber : {
               label: {
                     required
                 },
@@ -866,6 +1007,15 @@ export default {
             this.modaltitle = "Allow ZapDepot to access your Google Account Account?";
             this.v$.google.$reset();
         },
+        aweberModel() {
+            (this.aweber = {
+                id: "",
+                label: "",
+            }),
+            (this.aweberPopUP = true);
+            this.modaltitle = "Allow ZapDepot to access your AWeber Account Account?";
+            this.v$.google.$reset();
+        },
         closeGoghilevel() {
             this.showgohilevel = false;
         },
@@ -877,6 +1027,9 @@ export default {
         },
         gooleModelCLose() {
             this.googlePopUP = false;
+        },
+        aweberModelCLose() {
+            this.aweberPopUP = false;
         },
         deleteGotogoogle(data) {
           this.$swal
@@ -1112,6 +1265,15 @@ export default {
             let domain_url = window.location.origin + '/integration/add/gohighlevel';
             let redirect_url = "https://marketplace.gohighlevel.com/oauth/chooselocation?response_type=code&redirect_uri=" + domain_url + "&client_id=62256ce0688c9632a80d915b-l0ghgtys&scope=contacts.write contacts.readonly conversations/message.readonly conversations/message.write users.write campaigns.readonly campaigns.readonly&state=gohighlevel"
             window.location.href = redirect_url
+        },
+        connectWithAWeber() {
+            this.v$.aweber.$touch();
+            if (this.v$.aweber.$invalid) {
+                return;
+            }
+            var url='https://auth.aweber.com/oauth2/authorize?response_type=code&client_id=0alKdCUBpyz9V4hlGOeh6XsLv160JC4H&redirect_uri=http://localhost:8081/integration/add/aweber&scope=account.read list.read list.write subscriber.read subscriber.write email.read email.write subscriber.read-extended landing-page.read&state='+this.aweber.label;
+            window.location.href=url
+            
         },
         redirectToGotowebinar() {
             let domain_url = window.location.origin + '/integration/add/gotowebinar';

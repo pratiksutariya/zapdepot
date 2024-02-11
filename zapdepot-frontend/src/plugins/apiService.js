@@ -3,8 +3,7 @@ import store from '@/store'
 // import { useStore } from 'vuex'
 // const store = useStore()
 const customAxios = axios.create({
-    baseURL: 'https://api.zapdepot.io/',
-    // baseURL: 'http://127.0.0.1:8000',
+    baseURL: process.env.VUE_APP_API_URL,
     timeout: 60000,
 });
 const requestHandler = request => {

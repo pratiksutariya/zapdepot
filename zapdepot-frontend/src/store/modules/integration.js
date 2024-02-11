@@ -106,6 +106,12 @@ const actions = {
         let resp = await axios.post('/api/integration/add-connect-to-google-account',data)
         return resp;
     },
+    // eslint-disable-next-line no-empty-pattern
+    async addAweberAccountauth({}, data) {
+        let resp = await axios.post('/api/integration/add-connect-to-aweber-account',data)
+        return resp;
+    },
+
 
     async getAllGoogleDATA({ commit }) {
         let resp = await axios.get('/api/get-all-google-accounts')

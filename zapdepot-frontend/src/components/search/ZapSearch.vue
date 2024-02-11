@@ -1,0 +1,54 @@
+<template>
+  <div>
+    <loader :active="loader" />
+    <div class="row">
+      <div class="col-12 row">
+        <div class="col-md-6 col-sm-12">
+          <div class="form-group">
+            <label for="">Zaps</label>
+            <select
+              class="form-control"
+              v-model="account_id"
+              id=""
+              @change="searchZapData()"
+            >
+              <option value="">All Zap Logs</option>
+              <option v-for="zap in zapdata" :key="zap.id" :value="zap.id">
+                {{ zap.name }}
+              </option>
+            </select>
+          </div>
+          <div>
+            <button @click="resetData()" class=" btn btn-outline-primary">
+              <i class="mr-2 nav-icon fas fa-refresh"></i>
+              Reset
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</template>
+
+<script>
+export default {
+  data() {
+    return {
+      account_id : "",
+    }
+  },
+  computed: {},
+  props: {
+    zapdata: Array,
+  },
+  methods: {
+    searchZapData() {
+      this.$emit('filterzap',this.account_id)
+    },
+    resetData() {
+      this.account_id = '';
+      this.$emit('filterzap',this.account_id)
+    }
+  },
+};
+</script>

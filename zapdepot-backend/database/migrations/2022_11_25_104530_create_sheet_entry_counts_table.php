@@ -19,6 +19,7 @@ class CreateSheetEntryCountsTable extends Migration
             $table->integer("zap_id")->nullable(); 
             $table->string("sender_tag_list_id")->nullable(); 
             $table->string("receiver_tag_list_id")->nullable(); 
+            $table->string("count")->nullable(); 
             $table->string("code")->nullable(); 
             $table->timestamps();
         });

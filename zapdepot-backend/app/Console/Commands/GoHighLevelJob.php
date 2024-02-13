@@ -115,6 +115,9 @@ class GoHighLevelJob extends Command
                                     // sendContactGohighlevelSingle::dispatch($senddata);
                                 }else if ($zdata->receiver_name == 'google_sheet') {
                                     GoogleSheet($senddata); 
+                                }else if ($zdata->receiver_name == 'aweber') {
+                                    $senddata['receiver_tag_list_id']=$zdata->receiver_tag_list_id ? $zdata->receiver_tag_list_id : null;
+                                    AweberSendData($senddata);
                                 }
                                 // sendContact::dispatch($datac,$this->zaps->from_id);
                                 Contacts::insert($sdata);

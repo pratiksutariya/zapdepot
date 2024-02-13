@@ -99,6 +99,9 @@ class GoHighLevelSingleJob extends Command
                                     } else if ($zdata->receiver_name == 'google_sheet') {
                                         // \Log::info("google_sheet go high level single");
                                         GoogleSheet($senddata);
+                                    } else if ($zdata->receiver_name == 'aweber') {
+                                        $senddata['receiver_tag_list_id']=$zdata->receiver_tag_list_id ? $zdata->receiver_tag_list_id : null;
+                                        AweberSendData($senddata);
                                     }
                                     Contacts::insert($sdata);
                                 } 

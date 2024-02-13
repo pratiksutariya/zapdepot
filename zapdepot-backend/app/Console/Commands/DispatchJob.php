@@ -91,6 +91,9 @@ class DispatchJob extends Command
                                     } else if ($zapValue->receiver_name == 'google_sheet') {
                                         GoogleSheet($valueArray);
                                         // \Log::info("success-ok-googels-------------------");
+                                    } else if ($zdata->receiver_name == 'aweber') {
+                                        $senddata['receiver_tag_list_id']=$zdata->receiver_tag_list_id ? $zdata->receiver_tag_list_id : null;
+                                        AweberSendData($valueArray);
                                     }
                                 }
                             }

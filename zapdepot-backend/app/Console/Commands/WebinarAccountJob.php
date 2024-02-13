@@ -95,6 +95,9 @@ class WebinarAccountJob extends Command
                                         // \Log::info("google_sheet for webinar...");
                                         GoogleSheet($senddata);
                                         // sendContactToWebinarAccount::dispatch($senddata);
+                                    }else if ($zdata->receiver_name == 'aweber') {
+                                        $senddata['receiver_tag_list_id']=$zdata->receiver_tag_list_id ? $zdata->receiver_tag_list_id : null;
+                                        AweberSendData($senddata);
                                     }
                                     Contacts::insert($sdata);
                                 }

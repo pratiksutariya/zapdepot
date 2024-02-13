@@ -36,6 +36,8 @@ class Kernel extends ConsoleKernel
         Commands\refreshTokenGohighLevel::class,
         Commands\WebinarAccountJob::class,
         Commands\GoHighLevelSingleJob::class,
+        Commands\RefreshAweber::class,
+        Commands\AweberJobs::class,
         Commands\ActiveCampaignJob::class,  //activeCampaign:call
     ]; 
     protected function schedule(Schedule $schedule)
@@ -59,82 +61,44 @@ class Kernel extends ConsoleKernel
         ->groupBy("sender_name")
         ->get(); 
         foreach($zaps as $zap){ 
-            // if(($zap->sender_name=='gohighlevel')&&($zap->receiver_name=='webinar_account')){
-            //     $schedule->call(function () {
-            //         app(\App\Http\Controllers\Zapcontroller::class)->goheight_to_webinar();
-            //     })->everyMinute();
-            // }else if(($zap->sender_name=='gohighlevel')&&($zap->receiver_name=='active_campaign')){
-            //     $schedule->call(function () {
-            //         app(\App\Http\Controllers\Zapcontroller::class)->goheight_to_activecamp();
-            //     })->everyMinute();
-            // }else if(($zap->sender_name=='active_campaign')&&($zap->receiver_name=='gohighlevel')){
-            //     $schedule->call(function () {
-            //         app(\App\Http\Controllers\Zapcontroller::class)->activecamp_to_goheight();
-            //     })->everyMinute();
-            // }else if(($zap->sender_name=='active_campaign')&&($zap->receiver_name=='webinar_account')){
-            //     $schedule->call(function () {
-            //         app(\App\Http\Controllers\Zapcontroller::class)->activecamp_to_webinar();
-            //     })->everyMinute();
-            // }else if(($zap->sender_name=='webinar_account')&&($zap->receiver_name=='gohighlevel')){
-            //     $schedule->call(function () {
-            //         app(\App\Http\Controllers\Zapcontroller::class)->webinar_to_goheight();
-            //     })->everyMinute();
-            // }  
             if($zap->sender_name=='active_campaign'){
-                // \Log::info("active_campaign./....");
                 $schedule->command('activeCampaign:call')->everyMinute()
-                // $schedule->job(new getActiveCampaignContact($zap))->everyMinute()
                 ->onSuccess(function () use($zap) { 
                     if($zap->data_transfer_status == 1){
                         $zap->update(['data_transfer_status' => 0]);
                     }  
-                    // \Log::info("active_campaign Success");
                 })
                 ->onFailure(function () {
-                    // \Log::info("active_campaign Failure");
                 });
             }
             if($zap->sender_name=='gohighlevel'){
-                // \Log::info("gohighlevel./....");  
-                //  $schedule->job(new getGohighlevelContact($zap))->everyMinute()
                 $schedule->command('gohighlevel:call')->everyMinute() 
                  ->onSuccess(function () use($zap) { 
                     if($zap->data_transfer_status == 1){ 
                         $zap->update(['data_transfer_status' => 0]);
                     }  
-                    // \Log::info("gohighlevel Success");
                 })
                 ->onFailure(function () {
-                    // \Log::info("gohighlevel Failure");
                 });
             }
             if($zap->sender_name=='gohighlevel_single'){
-                // \Log::info("gohighlevel_single./...."); 
-                
                 $schedule->command('gohighlevelsingle:call')->everyMinute()
-                // $schedule->job(new getGohighlevelContactsSingle($zap))->everyMinute()
                 ->onSuccess(function () use($zap) { 
                     if($zap->data_transfer_status == 1){
                         $zap->update(['data_transfer_status' => 0]);
                     }  
-                    // \Log::info("gohighlevel_single Success");
                 })
                 ->onFailure(function () {
-                    // \Log::info("gohighlevel_single Failure");
                 });
             }
             if($zap->sender_name=='webinar_account'){
-                // \Log::info("webinar_account./....");
                 $schedule->command('gotowebinar:call')->everyMinute()
-                // $schedule->job(new getWebinarContact($zap))->everyMinute()
                 ->onSuccess(function () use($zap) { 
                     if($zap->data_transfer_status == 1){
                         $zap->update(['data_transfer_status' => 0]);
                     }  
-                    // \Log::info("webinar_account Success");
                 })
                 ->onFailure(function () {
-                    // \Log::info("webinar_account Failure");
                 });
             }
             if($zap->sender_name=='google_sheet') { 
@@ -143,19 +107,25 @@ class Kernel extends ConsoleKernel
                     if($zap->data_transfer_status == 1){
                         $zap->update(['data_transfer_status' => 0]);
                     }  
-                    // \Log::info("Success");
                 })
                 ->onFailure(function () {
-                    // \Log::info("Failure");
+                }); 
+            }
+            if($zap->sender_name=='aweber') { 
+                $schedule->command('aweber:job')->everyMinute()
+                ->onSuccess(function () use($zap) {
+                    if($zap->data_transfer_status == 1){
+                        $zap->update(['data_transfer_status' => 0]);
+                    }  
+                })
+                ->onFailure(function () {
                 }); 
             }
         }
         
-        //refresh token
         $schedule->command('refreshtokengohighlevel:call')->everyMinute();
-        // $schedule->job(new refreshTokenGohighLevel($a))->everySixHours();
         $schedule->command('refreshtokenwebinar:call')->everyMinute();
-        // $schedule->job(new refreshTokenGoToWebinar($w))->hourly();
+        $schedule->command('refreshAweber:call')->everyMinute();
         
     }
 

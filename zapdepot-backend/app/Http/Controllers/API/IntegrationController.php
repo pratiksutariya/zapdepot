@@ -12,12 +12,14 @@ use App\Models\Zap;
 use App\Models\Contacts;
 use App\Models\ZapDetail;
 use App\Models\GoMeta;
+use App\Models\ActiveMeta;
 use App\Jobs\sendContactToWebinarAccount;
 use App\Jobs\sendContactToGohighlevel;
 use App\Jobs\sendContactToActiveCampaign;
 use App\Jobs\sendGoogleSheetsData;
 use App\Jobs\sendContactGohighlevelSingle;
 use App\Models\GoogleAccount;
+use App\Models\AweberAccount;
 use App\Models\GoToWebinarAccounts;
 use App\Models\sheetEntryCount;
 use Validator;
@@ -142,6 +144,16 @@ class IntegrationController extends BaseController
         }
     }
 
+    public function getAllAweber()
+    {
+        try {
+            $data = AweberAccount::where('user_id', Auth::id())->latest()->get();
+            return $this->sendResponse($data, 'success.', 200);
+        } catch (\Throwable$e) {
+            return $this->sendError('Internal Server Error.', $e->getMessage(), 500);
+        }
+    }
+
     public function getGoogleAccounts()
     {
         try {
@@ -219,6 +231,59 @@ class IntegrationController extends BaseController
 
                 }
             }
+       
+        } catch (\Throwable$e) {
+            return $this->sendError('Internal Server Error.', $e->getMessage(), 500);
+        }
+    }
+
+    public function refreshAweber()
+    {
+        try {
+            $aweberAccount = AweberAccount::all();
+            if($aweberAccount) {
+                foreach($aweberAccount as $account) { 
+                    $account_id = $account->id;
+                    $key = connectionKey(); 
+                    $url="https://auth.aweber.com/oauth2/token";
+                    $method="POST";
+                    $data=array('grant_type'=>'refresh_token','refresh_token'=>$account->refresh_token);
+                    $headers=array('Authorization: Basic '.base64_encode($key['AWEBER_CLIENT_ID'].':'.$key['AWEBER_CLIENT_SECRET_KEY']));
+                    $access_options = connectIntegration($url,$headers,$method,$data);
+                    if($access_options && $access_options['status'] == true && $access_options['status_code'] == 200) {
+                        $acoounts_data = AweberAccount::find($account_id);
+                        $acoounts_data->access_token = $access_options['result']->access_token; 
+                        $acoounts_data->refresh_token = $access_options['result']->refresh_token;
+                        $acoounts_data->save();
+                    }
+                }
+            }
+            // if($googleAccounts) {
+            //     foreach($googleAccounts as $account) {
+            //         $account_id = $account->id;
+            //         $url = "https://oauth2.googleapis.com/token";
+            //         $method = "POST";
+            //         $headers = array(); 
+            //         $key = connectionKey();   
+            //         $data = array(
+            //                         'response_type' => 'token', 
+            //                         'client_id' => $key["GOOGLE_CLIENT_ID"],
+            //                         'client_secret' => $key["GOOGLE_SECRATE_KEY"],
+            //                         'refreshToken' => $account->refresh_token,
+            //                         'redirect_uri' => $key["GOOGLE_REDIRECT_URL"],
+            //                         'grant_type' => 'refresh_token'
+            //                     );
+
+            //         $access_options = connectIntegration($url,$headers,$method,$data);
+            //         if($access_options && $access_options['status'] == true && $access_options['status_code'] == 200) {
+            //             $acoounts_data = GoogleAccount::find($account_id);
+            //             $acoounts_data->access_token = $access_options['result']->access_token; 
+            //             $acoounts_data->refresh_token = $account->refresh_token;
+            //             $acoounts_data->save();
+            //         }
+
+            //     }
+            // }
        
         } catch (\Throwable$e) {
             return $this->sendError('Internal Server Error.', $e->getMessage(), 500);
@@ -445,6 +510,61 @@ class IntegrationController extends BaseController
         }
     }
 
+    public function aweberAccount(Request $request) {
+        try {
+            $user_id = Auth::id();
+            $check = AweberAccount::where('label' , $request->state)->where('user_id' , Auth::id())->first();
+            if($check) {
+                return response()->json(['status' => false, 'message' => 'This Label is already Added'], 200);
+            }
+            $key = connectionKey();
+            $url='https://auth.aweber.com/oauth2/token?grant_type=authorization_code&code='.$request->code.'&redirect_uri='.$key['AWEBER_REDIRECT_URL'];
+            $headers=array(
+                'Content-Type: application/x-www-form-urlencoded',
+                'Authorization: Basic '.base64_encode($key['AWEBER_CLIENT_ID'].':'.$key['AWEBER_CLIENT_SECRET_KEY'])
+            );
+            $method="POST";
+            $data=[];
+            $awber_token=connectIntegration($url,$headers,$method,$data);
+            if($awber_token['status_code'] == 200){
+                $token_result=$awber_token['result'];
+                $url='https://api.aweber.com/1.0/accounts';
+                $headers=array(
+                    'Authorization: Bearer '.$token_result->access_token
+                );
+                $method="GET";
+                $data=[];
+                $awber_account=connectIntegration($url,$headers,$method,$data);
+                if($awber_account['status_code'] == 200){
+                    $collection = array();
+                    $result=$awber_account['result'];
+                    $collection = array_merge($result->entries,$collection);
+                    $account = $collection[0];
+                    $account_id = $account->id;
+                    $aweberData = array();
+                    $aweberData['accessToken'] = $token_result->access_token;
+                    $aweberData['refreshToken'] = $token_result->refresh_token;
+                    $aweberData['account_id'] = $account_id;
+                    $data = array();
+                    $data['api_value'] = json_encode($aweberData);
+                    $data['user_id'] = Auth::user()->id;
+                    $data['api_type'] = 'aweber';
+                    $data['status'] = 1;
+                    $aweberAccount = new AweberAccount();
+                    $aweberAccount->user_id = $user_id;
+                    $aweberAccount->label = $request->state;
+                    $aweberAccount->account_id = $aweberData['account_id'];
+                    $aweberAccount->access_token = $aweberData['accessToken'];
+                    $aweberAccount->refresh_token = $aweberData['refreshToken'];
+                    $aweberAccount->save();
+                    return $this->sendResponse($aweberAccount, 'Account addded.', 200);
+                }
+            }            
+        } catch (\Exception$error) {
+            return response()->json(['status' => false, 'message' => $error->getMessage()], 500);
+        }
+    }
+
     public function googleAccountConnect(Request $request) {
         try {
              $user_id = Auth::id();  
@@ -469,102 +589,6 @@ class IntegrationController extends BaseController
     public function GoogleSheetIntegration(Request $request) {
         try {   
          
-            // $zap = Zap::where(['status' => 1, "sender_name" => 'gohighlevel'])
-            // ->whereNotNull('sender_id')
-            // ->whereNotNull('receiver_id')
-            // ->get();
-            // foreach ($zap as $zdata) {
-            //     // saveZapLog($zdata->id, 'Run Zap For Get Go High Level Accounts data', $zdata->user_id);
-            //     $account = GohighlevelAccounts::find($zdata->sender_id);
-            //     // \Log::info($account);
-            //     if ($account) {
-            //         $meta = GoMeta::where('go_account_id', $account->id)->where('zap_id', $zdata->id)->first();
-            //         // \Log::info($meta);
-            //         if ($meta) {
-            //             $url = "https://rest.gohighlevel.com/v1/contacts/?startAfterId=" . $meta->startAfterId . "&startAfter=" . $meta->startAfter . "&limit=20";
-            //         } else {
-            //             $url = "https://rest.gohighlevel.com/v1/contacts?limit=20";
-            //         }
-            //         $zap_detail = ZapDetail::where('zap_id', $zdata->id)->where('event_type', 'sender')->where('interation_type', 'gohighlevel')->first();
-            //         if ($zap_detail) {
-            //             $url .= "&query=" . $zap_detail->tag_id;
-            //         } 
-            //         $response = Http::withHeaders([
-            //             'Authorization' => 'Bearer ' . $account->api_key,
-            //         ])->get($url);
-            //         // dd($response->object());
-            //         // dump("getGoHighLevelData");
-            //         // dump($response->object());
-            //         if ($response->status() == 200) {
-            //             // \Log::info("if/........");
-            //             $rdata = $response->object();
-            //             // \Log::info(print_r($rdata));
-            //             dd($rdata);
-            //             if (count($rdata->contacts) != 0) {
-            //                 $sdata = [];
-            //                 $zdata->update(['data_transfer_status' => 1]);
-            //                 foreach ($rdata->contacts as $key => $datac) {
-            //                     if ($datac->email || $datac->phone || $datac->contactName) {
-            //                         $sdata[$key]['name'] = $datac->contactName;
-            //                         $sdata[$key]['firstname'] = $datac->firstName;
-            //                         $sdata[$key]['lastname'] = $datac->lastName;
-            //                         $sdata[$key]['email'] = $datac->email;
-            //                         $sdata[$key]['phone'] = $datac->phone;
-            //                         $sdata[$key]['account_id'] = $account->id;
-            //                         $sdata[$key]['user_id'] = $zdata->user_id;
-            //                         $sdata[$key]['zap_id'] = $zdata->id;
-            //                         $sdata[$key]['resource'] = 'gohighlevel';
-            //                         $sdata[$key]['created_at'] = date("Y-m-d H:i:s");
-            //                         $sdata[$key]['updated_at'] = date("Y-m-d H:i:s");
-
-            //                         $senddata = [];
-            //                         $senddata['firstName'] = $datac->firstName;
-            //                         $senddata['lastName'] = $datac->lastName;
-            //                         $senddata['name'] = $datac->firstName . " " . $datac->lastName;
-            //                         $senddata['email'] = $datac->email;
-            //                         $senddata['phone'] = $datac->phone;
-            //                         $senddata['receiver_id']= @$zdata->receiver_id;
-            //                         $senddata['zap_id'] = $zdata->id;
-            //                     }
-            //                     if ($zdata->receiver_name == 'webinar_account') {
-            //                         WebinarAccount($senddata);
-            //                         // \Log::info("webinar_account ...message");
-            //                         // sendContactToWebinarAccount::dispatch($senddata);
-            //                     } else if ($zdata->receiver_name == 'gohighlevel') {
-            //                         goHighLevel($senddata);
-            //                         // \Log::info("gohighlevel ...message");
-            //                         // sendContactToGohighlevel::dispatch($senddata);
-            //                     }else if ($zdata->receiver_name == 'active_campaign') {
-            //                         ActiveCampign($senddata);
-            //                         // \Log::info("active_campaign ...message");
-            //                         // sendContactToActiveCampaign::dispatch($senddata);
-            //                     }else if ($zdata->receiver_name == 'gohighlevel_single') {
-            //                         GohighlevelSingle($senddata);
-            //                         // \Log::info("gohighlevel_single ...message");
-            //                         // sendContactGohighlevelSingle::dispatch($senddata);
-            //                     }else if ($zdata->receiver_name == 'google_sheet') {
-            //                         GoogleSheet($senddata); 
-            //                     }
-            //                     // sendContact::dispatch($datac,$this->zaps->from_id);
-            //                     Contacts::insert($sdata);
-            //                     $metadata = $rdata->meta;
-            //                     if ($metadata->startAfterId && $metadata->startAfter) {
-            //                         $gdata['startAfterId'] = $metadata->startAfterId;
-            //                         $gdata['startAfter'] = $metadata->startAfter;
-            //                         $gdata['go_account_id'] = $account->id;
-            //                         $gdata['zap_id'] = $zdata->id;
-            //                         if ($meta) {
-            //                             $meta->update($gdata);
-            //                         } else {
-            //                             GoMeta::Create($gdata);
-            //                         }
-            //                     }
-            //                 }
-            //             }
-            //         }
-            //         // \Log::info("out if/........");
-            //     }
-            // }
             $zaps=Zap::where('status',1)
                   ->whereNotNull('sender_id')
                   ->whereNotNull('receiver_id')
@@ -827,6 +851,15 @@ class IntegrationController extends BaseController
             return $this->sendError('Internal Server Error.', $e->getMessage(), 500);
         }
     }
+
+    public function deleteAweberAccount($id){
+        try {
+            $delete = AweberAccount::where('id', $id)->delete();
+            return $this->sendResponse([], 'deleted', 200);
+        } catch (\Throwable$e) {
+            return $this->sendError('Internal Server Error.', $e->getMessage(), 500);
+        }
+    }
     public function gotowebinarUpWebs(Request $request){
         try {
             $validator = Validator::make($request->all(), [
@@ -869,4 +902,205 @@ class IntegrationController extends BaseController
             return $this->sendError('Internal Server Error.', $e->getMessage(), 500);
         }
     }
+
+    public function aweberData(Request $request){
+        try {
+            $validator = Validator::make($request->all(), [
+                'account_id' => 'required',
+            ]);
+            if ($validator->fails()) {
+                return $this->sendError('Validation Error.', $validator->errors(), 422);
+            }
+            $aweber = AweberAccount::find($request->account_id);
+            if (!$aweber) {
+                return $this->sendError('Data not found.', '', 404);
+            }
+            $account_id = $aweber->id;
+            $key = connectionKey(); 
+            $url="https://auth.aweber.com/oauth2/token";
+            $method="POST";
+            $data=array('grant_type'=>'refresh_token','refresh_token'=>$aweber->refresh_token);
+            $headers=array('Authorization: Basic '.base64_encode($key['AWEBER_CLIENT_ID'].':'.$key['AWEBER_CLIENT_SECRET_KEY']));
+            $access_options = connectIntegration($url,$headers,$method,$data);
+            if($access_options && $access_options['status'] == true && $access_options['status_code'] == 200) {
+                $aweber->access_token = $access_options['result']->access_token; 
+                $aweber->refresh_token = $access_options['result']->refresh_token;
+                $aweber->save();
+                // return $aweber;
+                $url="https://api.aweber.com/1.0/accounts/{$aweber->account_id}/lists";
+                // return $url;
+                $method="GET";
+                $data='';
+                $headers=array('Authorization: Bearer '.$aweber->access_token);
+                $getResponse = connectIntegration($url,$headers,$method,$data);
+                if($getResponse && $getResponse['status'] == true && $getResponse['status_code'] == 200) { 
+                    $lists = [];
+                    $lists['accounts_list'] = $getResponse['result']->entries;
+                    return $this->sendResponse($lists, 'success.', 200);
+                } else {
+                    return $this->sendError('Internal Server Error.',[], 500);
+                }
+            }
+        } catch (\Throwable$e) {
+            return $this->sendError('Internal Server Error.', $e->getMessage(), 500);
+        }
+    }
+
+    public function sendAweberData(Request $request){ 
+        try {
+            $zaps = Zap::where(['status' => 1, "sender_name" => 'aweber'])
+                    ->whereNotNull('sender_id')
+                    ->whereNotNull('receiver_id')
+                    ->get();
+            foreach ($zaps as $zap) { 
+                $account = AweberAccount::find($zap->sender_id);
+                if($account) {
+                    $url="https://api.aweber.com/1.0/accounts/$account->account_id/lists/$zap->sender_tag_list_id/subscribers";
+                    $method="GET";
+                    $data='';
+                    $headers=array('Authorization: Bearer '.$account->access_token);
+                    $access_options = connectIntegration($url,$headers,$method,$data);
+                    if($access_options && $access_options['status'] == true && $access_options['status_code'] == 200) {
+                        $res_data_entries = $access_options['result']->entries;
+                        foreach($res_data_entries as $key => $entry) {
+                            $sdata = [];
+                            $sdata[$key]['name'] = $entry->name;
+                            $sdata[$key]['firstname'] = "";
+                            $sdata[$key]['lastname'] = "";
+                            $sdata[$key]['email'] = $entry->email;
+                            $sdata[$key]['account_id'] = $account->id;
+                            $sdata[$key]['resource'] = 'aweber';
+                            $sdata[$key]['user_id'] = $zap->user_id;
+                            $sdata[$key]['zap_id'] = $zap->id;
+                            $senddata=[];
+                            $senddata['firstName']=$entry->name;
+                            $senddata['lastName']=$entry->name;
+                            $senddata['user_id']=$zap->user_id;
+                            $senddata['name']=$entry->name;
+                            $senddata['email']=$entry->email;
+                            $senddata['receiver_id']=$zap->receiver_id;
+                            $senddata['zap_id']=$zap->id;
+                            $senddata['phone']= connectionKey()['set_mobile_no'];
+                            if($zap->receiver_name=='webinar_account'){
+                                WebinarAccount($senddata);
+                            }else if($zap->receiver_name=='gohighlevel'){
+                                goHighLevel($senddata);
+                                $senddata['phone']='';
+                            }else if($zap->receiver_name=='active_campaign'){
+                                ActiveCampign($senddata);
+                                $senddata['phone']='';
+                            }elseif($zap->receiver_name=='gohighlevel_single'){
+                                GohighlevelSingle($senddata);
+                                $senddata['phone']='';
+                            }if($zap->receiver_name=='google_sheet'){
+                                GoogleSheet($senddata);
+                            }if($zap->receiver_name=='aweber'){
+                                $senddata['receiver_tag_list_id']=$zap->receiver_tag_list_id ? $zap->receiver_tag_list_id : null;
+                                AweberSendData($senddata);
+                            } 
+                            Contacts::insert($sdata); 
+                        } 
+                        
+                    }
+                }
+            }
+            // $zap = Zap::where(['status' => 1, "sender_name" => 'active_campaign']) 
+            // ->whereNotNull('sender_id')
+            // ->whereNotNull('receiver_id')
+            // ->where('id' , 63)
+            // ->get();
+            // foreach ($zap as $zdata) { 
+            //     saveZapLog($zdata->id , 'Run Zap For Get Active Campaign Accounts data',$zdata->user_id );
+            //     $account = ActiveCampaignAccounts::find($zdata->sender_id);
+            //     if ($account) {
+            //         $url = $account->api_url . '/api/3/contacts?orders[cdate]=ASC&limit=20';
+            //         $meta = ActiveMeta::where('active_id', $account->id)->where('zap_id', $zdata->id)->first();
+            //         if ($meta) {
+            //             $url .= "&id_greater=" . $meta->id_greater;
+            //         }
+            //         $zap_detail = ZapDetail::where('zap_id', $zdata->id)->where('event_type', 'sender')->where('interation_type', 'active_campaign')->first();
+            //         if ($zap_detail) {
+            //             if ($zap_detail->action_type == 'tag') {
+            //                 $url .= "&tagid=" . $zap_detail->tag_id;
+            //             } else if ($zap_detail->action_type == 'list') {
+            //                 $url .= "&listid=" . $zap_detail->list_id;
+            //             }
+            //         }
+            //         $response = Http::withHeaders([
+            //             'api-token' => $account->api_key,
+            //         ])->get($url);
+            //         if ($response->status()) {
+            //             dump($response->object());
+            //             $dataw = $response->object();
+            //             $ac = $dataw->contacts;
+            //             if (count($dataw->contacts)) {
+            //                 $ret=[];
+            //                 foreach ($dataw->contacts as $key => $datac) {
+            //                     $sdata[$key]['name'] = $datac->firstName . " " . $datac->lastName;
+            //                     $sdata[$key]['firstname'] = $datac->firstName;
+            //                     $sdata[$key]['lastname'] = $datac->lastName;
+            //                     $sdata[$key]['email'] = $datac->email;
+            //                     $sdata[$key]['phone'] = $datac->phone;
+            //                     $sdata[$key]['account_id'] = $account->id;
+            //                     $sdata[$key]['resource'] = 'active_campaign';
+            //                     $sdata[$key]['user_id'] = $zdata->user_id;
+            //                     $sdata[$key]['zap_id'] = $zdata->id;
+            //                         $senddata=[];
+            //                         $senddata['firstName']=$datac->firstName;
+            //                         $senddata['lastName']=$datac->lastName;
+            //                         $senddata['name']=$datac->firstName." ".$datac->lastName;
+            //                         $senddata['email']=$datac->email;
+            //                         $senddata['phone']=$datac->phone;
+            //                         $senddata['receiver_id']=$zdata->receiver_id;
+            //                         $senddata['zap_id']=$zdata->id; 
+
+            //                         if($zdata->receiver_name=='webinar_account'){
+            //                             // \Log::info("webinar_account activeCampaign,,,,,,,,,");
+            //                             WebinarAccount($senddata);
+            //                             // sendContactToWebinarAccount::dispatch($senddata);
+            //                         }else if($zdata->receiver_name=='gohighlevel'){
+            //                             // \Log::info("gohighlevel activeCampaign,,,,,,,,,");
+            //                             goHighLevel($senddata);
+            //                             // sendContactToGohighlevel::dispatch($senddata);
+            //                         }elseif($zdata->receiver_name=='active_campaign'){ 
+            //                             // \Log::info("active_campaign activeCampaign,,,,,,,,,");
+            //                             ActiveCampign($senddata);
+            //                             // sendContactToActiveCampaign::dispatch($senddata);
+            //                         } else if ($zdata->receiver_name == 'gohighlevel_single') {
+            //                             // \Log::info("gohighlevel_single activeCampaign,,,,,,,,,");
+            //                             GohighlevelSingle($senddata);
+            //                             // sendContactGohighlevelSingle::dispatch($senddata); 
+            //                         } else if ($zdata->receiver_name == 'google_sheet') {
+            //                             // \Log::info("google_sheet activeCampaign,,,,,,,,,");
+            //                             GoogleSheet($senddata);
+            //                         } else if ($zdata->receiver_name == 'aweber') {
+                                        
+            //                                 $senddata['receiver_tag_list_id']=$zdata->receiver_tag_list_id ? $zdata->receiver_tag_list_id : null;
+            //                                 $ret[$key]['rseponse'] = AweberSendData($senddata);
+            //                             // }
+
+            //                         }
+            //                         Contacts::insert($sdata);
+            //                     }
+            //                 $last = last($dataw->contacts);
+            //                 if ($last) {
+            //                     $gdata['zap_id'] = $zdata->id;
+            //                     $gdata['active_id'] = $account->id;
+            //                     $gdata['id_greater'] = $last->id;
+            //                     if ($meta) {
+            //                         $meta->update($gdata);
+            //                     } else {
+            //                         ActiveMeta::Create($gdata);
+            //                     }
+            //                 }
+            //             }
+            //         }
+            //     }
+            // }       
+        } catch (\Throwable$e) {
+            return $this->sendError('Internal Server Error.', $e->getMessage(), 500);
+        }
+    }
+
+
 }

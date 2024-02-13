@@ -25,6 +25,7 @@ Route::controller(AuthController::class)->group(function(){
     Route::post('login', 'login');
     Route::post('logout', 'logout')->middleware('auth:api');
 });
+
 Route::group(['middleware' => 'auth:api'], function () {
     Route::controller(UserController::class)->group(function(){
         Route::post('update-user', 'updateUser');
@@ -49,17 +50,21 @@ Route::group(['middleware' => 'auth:api'], function () {
         Route::get('delete-gohighlevel-account/{id}', 'deleteGohighlevelAccount');
         Route::post('get-gohighlevel-tags', 'getGohighlevelTags');
         Route::get('get-all-account-active','getAllAccountActive');
+        Route::get('get-all-aweber','getAllAweber');
         Route::post('add-acitve-campaign', 'addAcitveCampaign');
         Route::get('delete-acitve-campaign-account/{id}', 'deleteActiveCamAccount');
         Route::get('get-active-campaign-tags/{id}','getActiveCampaignTags');
         Route::get('get-active-campaign-list/{id}','getActiveCampaignList');
         Route::get('connect-gotowebinar/{id}','connect_gotowebinar');
         Route::post('connect-gotowebinar-events','gotowebinarUpWebs');
+        Route::post('connect-aweber-account-events','aweberData');
         Route::post('integration/add/gotowebinar','connectGotoWebinar');
         Route::post('integration/connect-to-google-account','googleAccountConnect');
         Route::post('integration/add-connect-to-google-account','googleAccount');
+        Route::post('integration/add-connect-to-aweber-account','aweberAccount');
         Route::get('integration-get-data-gotowebinar','gowebinarAlldata');
         Route::get('delete-single-gotowebinar/{id}','deleteGotoWebinar');
+        Route::get('delete-aweber-accounts/{id}','deleteAweberAccount');
     });
     Route::controller(Zapcontroller::class)->group(function(){
         Route::get('get-all-zaps','getAllzaps');
@@ -76,6 +81,8 @@ Route::group(['middleware' => 'auth:api'], function () {
 
 Route::controller(IntegrationController::class)->group(function(){
     Route::get('integration/add/google-accounts','googleAccount');
+    Route::get('refresh-tokens','refreshAweber');
+    Route::get('send-aweber-data','sendAweberData');
 });
 Route::controller(Zapcontroller::class)->group(function(){
         Route::get('dis-job','dis');

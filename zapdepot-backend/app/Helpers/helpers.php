@@ -6,8 +6,9 @@ use App\Models\ZapDetail;
 use App\Models\GohighlevelAccounts;
 use App\Models\ActiveCampaignAccounts;
 use App\Models\GoToWebinarAccounts; 
+use App\Models\AweberAccount; 
 use Illuminate\Support\Facades\Http;
-use Auth;
+// use Auth;
 
 if (!function_exists('connectIntegration')) {
     function connectIntegration($url, $headers, $method, $data)
@@ -83,6 +84,10 @@ function connectionKey()
     $input['GOHIGHLEVEL_REDIRECT_URL'] = 'https://zapdepot.io/integration/add/gohighlevel';
     $input['GOHIGHLEVEL_API_KEY'] = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJsb2NhdGlvbl9pZCI6ImNScDVneFZ5MkRhblFqd0MybmJnIiwiY29tcGFueV9pZCI6Im02eG9Pa1dGcEpXMlNLOVF3WGlLIiwidmVyc2lvbiI6MSwiaWF0IjoxNjcwNTcyNzE1NTk5LCJzdWIiOiJVVndQZWIzc1JQcDZleU9aZkJvSSJ9.x8B-YDIVp9NDDzMC-vqJ_9rv00iYII97EuS6hpq6FNE';
     // $input['GOHIGHLEVEL_API_KEY'] = 'http://localhost:8080/integration/add/gohighlevel';
+
+    $input['AWEBER_CLIENT_ID'] = "0alKdCUBpyz9V4hlGOeh6XsLv160JC4H";
+    $input['AWEBER_CLIENT_SECRET_KEY'] = "MYepVEfYr0mPmEthnXH4pA99A08Z8fN1";
+    $input['AWEBER_REDIRECT_URL'] = "http://localhost:8080/integration/add/aweber";
     return $input;
 }
  
@@ -261,4 +266,28 @@ function GohighlevelSingle($user_data)
         } catch (\Throwable$e) {
         \Log::info($e->getMessage());
     }
+    }
+
+
+
+    function AweberSendData($user_data){
+        try {    
+            Log::info('send-aweber'); 
+            // dd($user_data);
+            $r_acc_data=AweberAccount::find($user_data['receiver_id']);
+            $url="https://api.aweber.com/1.0/accounts/$r_acc_data->account_id/lists/".$user_data['receiver_tag_list_id']."/subscribers";
+            // dd($url , $r_acc_data);
+            $method="POST";
+            $data=array(
+                "email" => $user_data['email'],
+                "name" => $user_data['name'],
+                "update_existing" => "true",
+            );
+            $data = http_build_query($data);
+            $headers=array('Authorization: Bearer '.$r_acc_data->access_token , 'Content-Type' => 'application/x-www-form-urlencoded');
+            $response = connectIntegration($url,$headers,$method,$data);
+            // return array("res" => $response , "u_Data" => $user_data);
+        } catch (\Throwable$e) {
+            \Log::info($e->getMessage());
+        }
     }

@@ -1,1 +1,0 @@
-<h1>mailmailmailmail</h1><?php /**PATH /home/api.zapdepot.io/public_html/resources/views/mail.blade.php ENDPATH**/ ?>

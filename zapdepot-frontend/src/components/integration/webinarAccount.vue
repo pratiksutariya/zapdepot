@@ -65,7 +65,6 @@ props:['getWebinarsAccounts','selected_tag_list_id','action_type','selected_acco
       getTags: [],
       tag_list_id: this.selected_tag_list_id,
       account_id: this.selected_account_id,
-      // zap:
     };
   },
   computed: {

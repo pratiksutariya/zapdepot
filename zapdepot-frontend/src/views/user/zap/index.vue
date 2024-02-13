@@ -128,6 +128,13 @@
                               src="@/assets/images/ready-funnels-small.png"
                             />
                             <img
+                            v-else-if="account.sender_name == 'aweber'"
+                              class="img-set mr-1"
+                              width="23"
+                              height="23"
+                              src="@/assets/images/aweber_2.png"
+                            />
+                            <img
                               v-else-if="
                                 account.sender_name == 'active_campaign'
                               "
@@ -154,7 +161,6 @@
                               height="23"
                               src="@/assets/images/webinar.png"
                             />
-
                             <img
                               v-else-if="account.sender_name == 'google_sheet'"
                               class="img-set mr-1"
@@ -162,13 +168,19 @@
                               height="23"
                               src="@/assets/images/Sheets.png"
                             />
-
                             <img
                               v-if="account.receiver_name == 'gohighlevel'"
                               class="img-set ml-1"
                               width="23"
                               height="23"
                               src="@/assets/images/ready-funnels-small.png"
+                            />
+                            <img
+                            v-else-if="account.receiver_name == 'aweber'"
+                              class="img-set mr-1"
+                              width="23"
+                              height="23"
+                              src="@/assets/images/aweber_2.png"
                             />
                             <img
                               v-else-if="

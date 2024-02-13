@@ -3,6 +3,7 @@ const state = {
     getAllGohilevel: [],
     getAllGohilevelSingle: [],
     getAllActive: [],
+    getAllAweber: [],
     SgoTags: [],
     RgoTags: [],
     getAllDashData: '',
@@ -11,6 +12,7 @@ const state = {
     allGoogleAccounts: [],
     allGoogleAccountsSheets: [],
     getAllWebinarEvent: '',
+    getAweberEventData: '',
 };
 
 
@@ -21,6 +23,12 @@ const mutations = {
     },
     SET_ACTIVE_CAM_ACCOUNT_ALL(state, value) {
         state.getAllActive = value
+    },
+    SET_AWEBER_ALL(state, value) {
+        state.getAllAweber = value
+    },
+    SET_AWEBER_EVENT(state, value) {
+        state.getAweberEventData = value
     },
     SET_GO_TAGS(state, value) {
         state.SgoTags = value
@@ -146,6 +154,14 @@ const actions = {
         return resp;
     },
 
+    async deleteAweberAccount({ dispatch } , data) {
+        let resp = await axios.get('/api/delete-aweber-accounts/'+data)
+        if (resp.data.status == true) {
+            dispatch("getAllAweberAc")
+        }
+        return resp;
+    },
+
     async setAllGohilevelAccountsSingle({ commit }) {
         let resp = await axios.get('/api/get-all-account-go-single')
         if (resp.data.status == true) {
@@ -187,6 +203,14 @@ const actions = {
         let resp = await axios.get('/api/get-all-account-active')
         if (resp.data.status == true) {
             commit('SET_ACTIVE_CAM_ACCOUNT_ALL', resp.data.data)
+        }
+        return resp;
+    },
+
+    async getAllAweberAc({ commit }) {
+        let resp = await axios.get('/api/get-all-aweber')
+        if (resp.data.status == true) {
+            commit('SET_AWEBER_ALL', resp.data.data)
         }
         return resp;
     },
@@ -268,6 +292,13 @@ const actions = {
         let resp = await axios.post('/api/connect-gotowebinar-events', data)
         if (resp.data.status == true) {
             commit('SET_WEB_EVENTS', resp.data.data)
+        }
+        return resp;
+    },
+    async getAweberEvent({ commit }, data) {
+        let resp = await axios.post('/api/connect-aweber-account-events', data)
+        if (resp.data.status == true) {
+            commit('SET_AWEBER_EVENT', resp.data.data)
         }
         return resp;
     },

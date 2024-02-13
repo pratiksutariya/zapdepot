@@ -1,7 +1,6 @@
 <template>
   <loader :active="loader" />
   <section class="content-header">
-
     <div class="container-fluid">
       <div class="row mb-2">
         <div class="col-sm-6">
@@ -41,7 +40,15 @@
                       top: 8%;
                     "
                   >
-                    <img  style="width: 35px;margin-right: 10px; object-fit: contain;" src="../../../assets/images/ready-funnels-small.png" alt="">
+                    <img
+                      style="
+                        width: 35px;
+                        margin-right: 10px;
+                        object-fit: contain;
+                      "
+                      src="../../../assets/images/ready-funnels-small.png"
+                      alt=""
+                    />
                     <h2 style="margin: 0">Ready Funnels Pro</h2>
                   </div>
                 </div>
@@ -128,7 +135,15 @@
                       top: 8%;
                     "
                   >
-                  <img  style="width: 35px;margin-right: 10px; object-fit: contain;" src="../../../assets/images/activec.png" alt="">
+                    <img
+                      style="
+                        width: 35px;
+                        margin-right: 10px;
+                        object-fit: contain;
+                      "
+                      src="../../../assets/images/activec.png"
+                      alt=""
+                    />
                     <h2 style="margin: 0">Active Campaign</h2>
                   </div>
                 </div>
@@ -221,7 +236,15 @@
                       top: 8%;
                     "
                   >
-                    <img  style="width: 35px;margin-right: 10px; object-fit: contain;" src="../../../assets/images/gohighlevel.png" alt="">
+                    <img
+                      style="
+                        width: 35px;
+                        margin-right: 10px;
+                        object-fit: contain;
+                      "
+                      src="../../../assets/images/gohighlevel.png"
+                      alt=""
+                    />
                     <h2 style="margin: 0">Gohighlevel</h2>
                   </div>
                 </div>
@@ -312,7 +335,15 @@
                       top: 8%;
                     "
                   >
-                  <img  style="width: 35px;margin-right: 10px; object-fit: contain;" src="../../../assets/images/webinar.png" alt="">
+                    <img
+                      style="
+                        width: 35px;
+                        margin-right: 10px;
+                        object-fit: contain;
+                      "
+                      src="../../../assets/images/webinar.png"
+                      alt=""
+                    />
                     <h2 style="margin: 0">Go To Webinar</h2>
                   </div>
                 </div>
@@ -345,13 +376,16 @@
                       </tr>
                     </thead>
                     <tbody>
-                      <tr  v-for="(get,index) in getWebinarAccounts" :key="get.id">
-                        <td>{{++index}}</td>
-                        <td>{{get.first_name}}</td>
-                        <td>{{get.last_name}}</td>
-                        <td>{{get.email}}</td>
-                        <td>{{get.account_key}}</td>
-                        <td>{{get.organizer_key}}</td>
+                      <tr
+                        v-for="(get, index) in getWebinarAccounts"
+                        :key="get.id"
+                      >
+                        <td>{{ ++index }}</td>
+                        <td>{{ get.first_name }}</td>
+                        <td>{{ get.last_name }}</td>
+                        <td>{{ get.email }}</td>
+                        <td>{{ get.account_key }}</td>
+                        <td>{{ get.organizer_key }}</td>
                         <td>
                           <button
                             class="btn btn-danger delete-btn"
@@ -377,7 +411,7 @@
         <div class="col-md-12">
           <div
             class="card card-primary card-outline"
-            style="border-color: #E75F4D"
+            style="border-color: #e75f4d"
           >
             <div class="card-header">
               <div class="row">
@@ -393,7 +427,15 @@
                       top: 8%;
                     "
                   >
-                    <img  style="width: 35px;margin-right: 10px; object-fit: contain;" src="../../../assets/images/Sheets.png" alt="">
+                    <img
+                      style="
+                        width: 35px;
+                        margin-right: 10px;
+                        object-fit: contain;
+                      "
+                      src="../../../assets/images/Sheets.png"
+                      alt=""
+                    />
                     <h2 style="margin: 0">Google Account</h2>
                   </div>
                 </div>
@@ -424,11 +466,22 @@
                       </tr>
                     </thead>
                     <tbody>
-                      <tr  v-for="(get,index) in allGoogleAccounts" :key="index">
-                        <td>{{++index}}</td>
-                        <td>{{get.label}}</td>
-                        <td>{{get.access_token.substring(0, 50) + '***********'}}</td>
-                        <td>{{get.refresh_token.substring(0, 50) + '***********'}}</td>
+                      <tr
+                        v-for="(get, index) in allGoogleAccounts"
+                        :key="index"
+                      >
+                        <td>{{ ++index }}</td>
+                        <td>{{ get.label }}</td>
+                        <td>
+                          {{
+                            get.access_token.substring(0, 50) + "***********"
+                          }}
+                        </td>
+                        <td>
+                          {{
+                            get.refresh_token.substring(0, 50) + "***********"
+                          }}
+                        </td>
                         <td>
                           <button
                             class="btn btn-danger delete-btn"
@@ -444,22 +497,19 @@
                 </div>
               </div>
 
-              
               <!-- /.card-body -->
             </div>
 
-            
             <!-- /.card -->
             <!-- /.card -->
           </div>
-          
         </div>
       </div>
       <div class="row mt-5">
         <div class="col-md-12">
           <div
             class="card card-primary card-outline"
-            style="border-color: #E75F4D"
+            style="border-color: #e75f4d"
           >
             <div class="card-header">
               <div class="row">
@@ -475,7 +525,15 @@
                       top: 8%;
                     "
                   >
-                    <img  style="width: 35px;margin-right: 10px; object-fit: contain;" src="../../../assets/images/aweber_2.png" alt="">
+                    <img
+                      style="
+                        width: 35px;
+                        margin-right: 10px;
+                        object-fit: contain;
+                      "
+                      src="../../../assets/images/aweber_2.png"
+                      alt=""
+                    />
                     <h2 style="margin: 0">AWeber Account</h2>
                   </div>
                 </div>
@@ -500,21 +558,34 @@
                       <tr>
                         <th style="width: 10px">#</th>
                         <th>Account Name</th>
+                        <th>Account ID</th>
                         <th>Access Token</th>
                         <th>Refresh Token</th>
                         <th style="width: 50px">Action</th>
                       </tr>
                     </thead>
                     <tbody>
-                      <tr  v-for="(get,index) in allGoogleAccounts" :key="index">
-                        <td>{{++index}}</td>
-                        <td>{{get.label}}</td>
-                        <td>{{get.access_token.substring(0, 50) + '***********'}}</td>
-                        <td>{{get.refresh_token.substring(0, 50) + '***********'}}</td>
+                      <tr
+                        v-for="(get, index) in getAllAweber"
+                        :key="index"
+                      >
+                        <td>{{ ++index }}</td>
+                        <td>{{ get.label }}</td>
+                        <td>{{ get.account_id }}</td>
+                        <td>
+                          {{
+                            get.access_token.substring(0, 50) + "***********"
+                          }}
+                        </td>
+                        <td>
+                          {{
+                            get.refresh_token.substring(0, 50) + "***********"
+                          }}
+                        </td>
                         <td>
                           <button
                             class="btn btn-danger delete-btn"
-                            @click="deleteGotogoogle(get)"
+                            @click="deleteGoAweber(get)"
                             style="padding: 8px !important"
                           >
                             <i class="fas fa-trash-alt"></i>
@@ -526,15 +597,12 @@
                 </div>
               </div>
 
-              
               <!-- /.card-body -->
             </div>
 
-            
             <!-- /.card -->
             <!-- /.card -->
           </div>
-          
         </div>
       </div>
     </div>
@@ -748,18 +816,11 @@
       </form>
     </template>
   </Model>
-  <Model
-    :modaltitle="modaltitle"
-    @close="gooleModelCLose()"
-    v-if="googlePopUP"
-  >
+  <Model :modaltitle="modaltitle" @close="gooleModelCLose()" v-if="googlePopUP">
     <template #modal-logo>
       <div class="image-box row">
         <div class="col-12 custom-box">
-          <img
-            src="@/assets/images/shhets.png"
-            style="max-width: 250px"
-          />
+          <img src="@/assets/images/shhets.png" style="max-width: 250px" />
         </div>
       </div>
     </template>
@@ -801,10 +862,7 @@
     <template #modal-logo>
       <div class="image-box row">
         <div class="col-12 custom-box">
-          <img
-            src="@/assets/images/aweber_2.png"
-            style="max-width: 250px"
-          />
+          <img src="@/assets/images/aweber_2.png" style="max-width: 250px" />
         </div>
       </div>
     </template>
@@ -842,477 +900,511 @@
 <script>
 import Model from "@/components/model.vue";
 import useVuelidate from "@vuelidate/core";
-import {
-    required,
-    url
-} from "@vuelidate/validators";
-import {
-    mapActions,
-    mapGetters,
-} from "vuex";
-import {
-    useToast
-} from "vue-toastification";
+import { required, url } from "@vuelidate/validators";
+import { mapActions, mapGetters, mapState } from "vuex";
+import { useToast } from "vue-toastification";
 export default {
-    setup() {
-        const toast = useToast();
-        return {
-            toast,
-            v$: useVuelidate()
-        };
-    },
-    data() {
-        return {
-            showgohilevel: false,
-            showactive: false,
-            googlePopUP: false,
-            aweberPopUP: false,
-            showgohilevelSig: false,
-            gohighlevel: {
-                label: "",
-                // location_id: "",
-                api_key: "",
-            },
-            gohighlevelSingle: {
-                label: "",
-            },
-            google : {
-              label: ""
-            },
-            aweber : {
-              label: ""
-            },
-            activeCam: {
-                label: "",
-                api_key: "",
-                api_url: "",
-            },
-            loader: false,
-            modaltitle: "",
-        };
-    },
-    validations() {
-        return {
-            gohighlevel: {
-                label: {
-                    required
-                },
-                // location_id: { required },
-                api_key: {
-                    required
-                },
-            },
-            activeCam: {
-                label: {
-                    required
-                },
-                api_key: {
-                    required
-                },
-                api_url: {
-                    required,
-                    url
-                },
-            },
-            gohighlevelSingle: {
-                label: {
-                    required
-                },
-            },
-            google : {
-              label: {
-                    required
-                },
-            },
-            aweber : {
-              label: {
-                    required
-                },
-            }
-        };
-    },
-    components: {
-        Model,
-    },
-    computed: {
-        ...mapGetters({
-            getallGAccounts: "integration/getGohighLevelAccounts",
-            getallGAccountsSingle: "integration/getGohighLevelAccountsSingle",
-            getActiveCamAccounts: "integration/getActiveCamAccounts",
-            getWebinarAccounts: "integration/getWebinarAccounts",
-            allGoogleAccounts: "integration/getGoogleAccounts",
-        }),
-        api_key_encrypt() {
-            return (value) => {
-                if (value.length > 50) {
-                    return value.substr(0, 50) + "*****";
-                } else {
-                    return value;
-                }
-            };
+  setup() {
+    const toast = useToast();
+    return {
+      toast,
+      v$: useVuelidate(),
+    };
+  },
+  data() {
+    return {
+      showgohilevel: false,
+      showactive: false,
+      googlePopUP: false,
+      aweberPopUP: false,
+      showgohilevelSig: false,
+      gohighlevel: {
+        label: "",
+        // location_id: "",
+        api_key: "",
+      },
+      gohighlevelSingle: {
+        label: "",
+      },
+      google: {
+        label: "",
+      },
+      aweber: {
+        label: "",
+      },
+      activeCam: {
+        label: "",
+        api_key: "",
+        api_url: "",
+      },
+      loader: false,
+      modaltitle: "",
+    };
+  },
+  validations() {
+    return {
+      gohighlevel: {
+        label: {
+          required,
         },
-    },
-    methods: {
-        ...mapActions({
-            addAccountGo: "integration/addGohighlevelAccount",
-            connectToGoogleAccount: "integration/connectToGoogleAccount",
-            setAllGohighlevel: "integration/getAllGohilevelAccounts",
-            getAllGoogleDATA: "integration/getAllGoogleDATA",
-            setAllGohighlevelSingle: "integration/setAllGohilevelAccountsSingle",
-            deleteGohighaccount: "integration/deleteGohighaccount",
-            addActiveCamAccount: "integration/addActiveCamAccount",
-            setAllActiveCamAccounts: "integration/getAllActiveCamAccounts",
-            deleteActiveAccount: "integration/deleteActiveAccount",
-            getAllWebinarData: "integration/getAllWebinarData",
-            deleteWebinarSingle: "integration/deleteWebinarSingle",
-            deleteGoogleAccount: "integration/deleteGoogleAccount",
-        }),
-        showModala() {
-            (this.activeCam = {
-                id: "",
-                label: "",
-                api_url: "",
-                api_key: "",
-            }),
-            (this.showactive = true);
-            this.modaltitle = "Allow ZapDepot to access your ActiveCampaign Account?";
-            this.v$.activeCam.$reset();
+        // location_id: { required },
+        api_key: {
+          required,
         },
-        showModalg() {
-            (this.gohighlevelSingle = {
-                id: "",
-                label: "",
-            }),
-            (this.showgohilevelSig = true);
-            this.modaltitle = "Allow ZapDepot to access your Gohighlevel Account?";
-            this.v$.gohighlevelSingle.$reset();
+      },
+      activeCam: {
+        label: {
+          required,
         },
-        showModal() {
-            (this.gohighlevel = {
-                id: "",
-                label: "",
-                // location_id: "",
-                api_key: "",
-            }),
-            (this.showgohilevel = true);
-            this.modaltitle = "Allow ZapDepot to access your Ready Funnels Pro Account?";
-            this.v$.gohighlevel.$reset();
+        api_key: {
+          required,
         },
-        googleModel() {
-            (this.google = {
-                id: "",
-                label: "",
-            }),
-            (this.googlePopUP = true);
-            this.modaltitle = "Allow ZapDepot to access your Google Account Account?";
-            this.v$.google.$reset();
+        api_url: {
+          required,
+          url,
         },
-        aweberModel() {
-            (this.aweber = {
-                id: "",
-                label: "",
-            }),
-            (this.aweberPopUP = true);
-            this.modaltitle = "Allow ZapDepot to access your AWeber Account Account?";
-            this.v$.google.$reset();
+      },
+      gohighlevelSingle: {
+        label: {
+          required,
         },
-        closeGoghilevel() {
-            this.showgohilevel = false;
+      },
+      google: {
+        label: {
+          required,
         },
-        closeActiveCam() {
-            this.showactive = false;
+      },
+      aweber: {
+        label: {
+          required,
         },
-        closeGoSingle() {
-            this.showgohilevelSig = false;
-        },
-        gooleModelCLose() {
-            this.googlePopUP = false;
-        },
-        aweberModelCLose() {
-            this.aweberPopUP = false;
-        },
-        deleteGotogoogle(data) {
-          this.$swal
-                .fire({
-                    title: "Are you sure?",
-                    text: "You won't be able to revert this!",
-                    icon: "warning",
-                    showCancelButton: true,
-                    confirmButtonColor: "#3085d6",
-                    cancelButtonColor: "#d33",
-                    confirmButtonText: "Yes, delete it!",
-                })
-                .then((result) => {
-                    if (result.isConfirmed) {
-
-                        this.deleteGoogleAccount(data.id)
-                            .then((response) => {
-                                if (response.data.status == true) {
-                                    this.$swal.fire(
-                                        "Deleted!",
-                                        "Account has been deleted.",
-                                        "success"
-                                    );
-                                }
-                            })
-                            .catch((error) => {
-                                this.toast.error(error.response.data.message);
-                            });
-                    }
-                });
-
-        },
-        editgohighlevel(data) {
-            this.modaltitle = "Allow ZapDepot to access your Ready Funnels Pro Account?";
-            this.gohighlevel = {
-                id: data.id,
-                label: data.label,
-                // location_id:data.location_id,
-                api_key: data.api_key,
-            };
-            this.showgohilevel = true;
-            this.v$.gohighlevel.$reset();
-        },
-        addgohilevel() {
-
-           this.v$.gohighlevel.$touch();
-            if (this.v$.gohighlevel.$invalid) {
-                return;
-            }
-            let domain_url = 'https://zapdepot.io/integration/add/gohighlevel';
-            // let domain_url = window.location.origin + '/integration/add/gohighlevel';
-            let redirect_url = "https://marketplace.gohighlevel.com/oauth/chooselocation?response_type=code&redirect_uri=" + domain_url + "&client_id=62256ce0688c9632a80d915b-l0ghgtys&scope=contacts.write contacts.readonly conversations/message.readonly conversations/message.write users.write campaigns.readonly campaigns.readonly&state=ready_funnels_pro"
-            window.location.href = redirect_url
-            // this.v$.gohighlevel.$touch();
-            // if (this.v$.gohighlevel.$invalid) {
-            //     return;
-            // }
-            // this.loader = true;
-            // this.addAccountGo(this.gohighlevel)
-            // .then(() => {
-            //     this.showgohilevel = false;
-            //     this.loader = false;
-            //     this.toast.success(
-            //         "Account added successfully."
-            //     );
-            // })
-            // .catch((error) => {
-            //     this.loader = false;
-            //     console.log(error.response);
-            //     this.toast.error(error.response.data.message);
-            // });
-        },
-        deletgohighlevel(id, type) {
-            this.$swal
-                .fire({
-                    title: "Are you sure?",
-                    text: "You won't be able to revert this!",
-                    icon: "warning",
-                    showCancelButton: true,
-                    confirmButtonColor: "#3085d6",
-                    cancelButtonColor: "#d33",
-                    confirmButtonText: "Yes, delete it!",
-                })
-                .then((result) => {
-                    if (result.isConfirmed) {
-                        let data = {
-                            id: id,
-                            type: type
-                        }
-                        this.deleteGohighaccount(data)
-                            .then((response) => {
-                                if (response.data.status == true) {
-                                    this.$swal.fire(
-                                        "Deleted!",
-                                        "Account has been deleted.",
-                                        "success"
-                                    );
-                                }
-                            })
-                            .catch((error) => {
-                                this.toast.error(error.response.data.message);
-                            });
-                    }
-                });
-        },
-        deletwebinar(id, type){
-          this.$swal
-            .fire({
-                title: "Are you sure?",
-                text: "You won't be able to revert this!",
-                icon: "warning",
-                showCancelButton: true,
-                confirmButtonColor: "#3085d6",
-                cancelButtonColor: "#d33",
-                confirmButtonText: "Yes, delete it!",
-            })
-            .then((result) => {
-                if (result.isConfirmed) {
-                    let data = {
-                        id: id,
-                        type: type
-                    }
-                    this.deleteWebinarSingle(data)
-                        .then((response) => {
-                            if (response.data.status == true) {
-                                this.$swal.fire(
-                                    "Deleted!",
-                                    "Account has been deleted.",
-                                    "success"
-                                );
-                            }
-                        })
-                        .catch((error) => {
-                            this.toast.error(error.response.data.message);
-                        });
-                }
-            });
-        },
-        addactive() {
-            this.v$.activeCam.$touch();
-            if (this.v$.activeCam.$invalid) {
-                return;
-            }
-            this.loader = true;
-            this.addActiveCamAccount(this.activeCam)
-                .then(() => {
-                    this.showactive = false;
-                    this.loader = false;
-                    this.toast.success(
-                        "Acitve campaign account added successfully."
-                    );
-                })
-                .catch((error) => {
-                    this.loader = false;
-                    this.toast.error(error.response.data.message);
-                });
-        },
-        async getgoaccounts() {
-            this.loader = true;
-            await this.setAllGohighlevel()
-                .then(() => {
-                    this.loader = false;
-                })
-                .catch(() => {
-                    this.loader = false;
-                });
-        },
-        async getAcitveaccounts() {
-            this.loader = true;
-            await this.setAllActiveCamAccounts()
-                .then(() => {
-                    this.loader = false;
-                })
-                .catch(() => {
-                    this.loader = false;
-                });
-        },
-        async getgosingle() {
-            this.loader = true;
-            await this.setAllGohighlevelSingle()
-                .then(() => {
-                    this.loader = false;
-                })
-                .catch(() => {
-                    this.loader = false;
-                });
-        },
-        editActivelevel(data) {
-            this.modaltitle = "Allow ZapDepot to access your ActiveCampaign Account?";
-            this.activeCam = {
-                id: data.id,
-                label: data.label,
-                api_url: data.api_url,
-                api_key: data.api_key,
-            };
-            this.showactive = true;
-            this.v$.activeCam.$reset();
-        },
-        deleteActiveCampaign(id) {
-            this.$swal
-                .fire({
-                    title: "Are you sure?",
-                    text: "You won't be able to revert this!",
-                    icon: "warning",
-                    showCancelButton: true,
-                    confirmButtonColor: "#3085d6",
-                    cancelButtonColor: "#d33",
-                    confirmButtonText: "Yes, delete it!",
-                })
-                .then((result) => {
-                    if (result.isConfirmed) {
-                        this.deleteActiveAccount(id)
-                            .then((response) => {
-                                if (response.data.status == true) {
-                                    this.$swal.fire(
-                                        "Deleted!",
-                                        "Account has been deleted.",
-                                        "success"
-                                    );
-                                }
-                            })
-                            .catch((error) => {
-                                this.toast.error(error.response.data.message);
-                            });
-                    }
-                });
-        },
-        addgohilevelsingle() {
-            this.v$.gohighlevelSingle.$touch();
-            if (this.v$.gohighlevelSingle.$invalid) {
-                return;
-            }
-            let domain_url = window.location.origin + '/integration/add/gohighlevel';
-            let redirect_url = "https://marketplace.gohighlevel.com/oauth/chooselocation?response_type=code&redirect_uri=" + domain_url + "&client_id=62256ce0688c9632a80d915b-l0ghgtys&scope=contacts.write contacts.readonly conversations/message.readonly conversations/message.write users.write campaigns.readonly campaigns.readonly&state=gohighlevel"
-            window.location.href = redirect_url
-        },
-        connectWithAWeber() {
-            this.v$.aweber.$touch();
-            if (this.v$.aweber.$invalid) {
-                return;
-            }
-            var url='https://auth.aweber.com/oauth2/authorize?response_type=code&client_id=0alKdCUBpyz9V4hlGOeh6XsLv160JC4H&redirect_uri=http://localhost:8081/integration/add/aweber&scope=account.read list.read list.write subscriber.read subscriber.write email.read email.write subscriber.read-extended landing-page.read&state='+this.aweber.label;
-            window.location.href=url
-            
-        },
-        redirectToGotowebinar() {
-            let domain_url = window.location.origin + '/integration/add/gotowebinar';
-            // let domain_url = "http://127.0.0.1:8000/api/integration/add/gotowebinar";
-            let redirect_url = `https://api.getgo.com/oauth/v2/authorize?client_id=2cbf7ce6-09ae-4106-a391-6df9a4dac8c3&response_type=code&redirect_uri=${domain_url}`
-            window.location.href = redirect_url
-        },
-
-        redirectToGoogleAccount() {
-          this.v$.google.$touch();
-            if (this.v$.google.$invalid) {
-                return;
-            }
-          this.loader = true;
-          let domain_url = window.location.origin + '/integration/add/googleAccount';
-          this.google.url = domain_url;
-            this.connectToGoogleAccount(this.google).then((resp) => {
-              if(resp.data.status) {
-                this.loader = false;
-                window.location.href = resp.data.data
-
-              } else {
-                this.loader = false;
-
-                this.toast.error(resp.data.message);
-              }
-            }).catch((errors) => {
-              this.loader = false;
-              console.log(errors)
-            })
+      },
+    };
+  },
+  components: {
+    Model,
+  },
+  computed: {
+    ...mapGetters({
+      getallGAccounts: "integration/getGohighLevelAccounts",
+      getallGAccountsSingle: "integration/getGohighLevelAccountsSingle",
+      getActiveCamAccounts: "integration/getActiveCamAccounts",
+      getWebinarAccounts: "integration/getWebinarAccounts",
+      allGoogleAccounts: "integration/getGoogleAccounts",
+    }),
+    ...mapState("integration", ["getAllAweber"]),
+    api_key_encrypt() {
+      return (value) => {
+        if (value.length > 50) {
+          return value.substr(0, 50) + "*****";
+        } else {
+          return value;
         }
+      };
     },
-    async created() {
-        this.getgoaccounts();
-        this.getAcitveaccounts();
-        this.getgosingle();
-        this.getAllWebinarData();
-        this.getAllGoogleDATA();
+  },
+  methods: {
+    ...mapActions({
+      addAccountGo: "integration/addGohighlevelAccount",
+      connectToGoogleAccount: "integration/connectToGoogleAccount",
+      setAllGohighlevel: "integration/getAllGohilevelAccounts",
+      getAllGoogleDATA: "integration/getAllGoogleDATA",
+      setAllGohighlevelSingle: "integration/setAllGohilevelAccountsSingle",
+      deleteGohighaccount: "integration/deleteGohighaccount",
+      addActiveCamAccount: "integration/addActiveCamAccount",
+      setAllActiveCamAccounts: "integration/getAllActiveCamAccounts",
+      deleteActiveAccount: "integration/deleteActiveAccount",
+      getAllWebinarData: "integration/getAllWebinarData",
+      deleteWebinarSingle: "integration/deleteWebinarSingle",
+      deleteGoogleAccount: "integration/deleteGoogleAccount",
+      deleteAweberAccount: "integration/deleteAweberAccount",
+      getAllAweberAccounts: "integration/getAllAweberAc",
+    }),
+    showModala() {
+      (this.activeCam = {
+        id: "",
+        label: "",
+        api_url: "",
+        api_key: "",
+      }),
+        (this.showactive = true);
+      this.modaltitle = "Allow ZapDepot to access your ActiveCampaign Account?";
+      this.v$.activeCam.$reset();
     },
+    showModalg() {
+      (this.gohighlevelSingle = {
+        id: "",
+        label: "",
+      }),
+        (this.showgohilevelSig = true);
+      this.modaltitle = "Allow ZapDepot to access your Gohighlevel Account?";
+      this.v$.gohighlevelSingle.$reset();
+    },
+    showModal() {
+      (this.gohighlevel = {
+        id: "",
+        label: "",
+        // location_id: "",
+        api_key: "",
+      }),
+        (this.showgohilevel = true);
+      this.modaltitle =
+        "Allow ZapDepot to access your Ready Funnels Pro Account?";
+      this.v$.gohighlevel.$reset();
+    },
+    googleModel() {
+      (this.google = {
+        id: "",
+        label: "",
+      }),
+        (this.googlePopUP = true);
+      this.modaltitle = "Allow ZapDepot to access your Google Account Account?";
+      this.v$.google.$reset();
+    },
+    aweberModel() {
+      (this.aweber = {
+        id: "",
+        label: "",
+      }),
+        (this.aweberPopUP = true);
+      this.modaltitle = "Allow ZapDepot to access your AWeber Account Account?";
+      this.v$.google.$reset();
+    },
+    closeGoghilevel() {
+      this.showgohilevel = false;
+    },
+    closeActiveCam() {
+      this.showactive = false;
+    },
+    closeGoSingle() {
+      this.showgohilevelSig = false;
+    },
+    gooleModelCLose() {
+      this.googlePopUP = false;
+    },
+    aweberModelCLose() {
+      this.aweberPopUP = false;
+    },
+    deleteGotogoogle(data) {
+      this.$swal
+        .fire({
+          title: "Are you sure?",
+          text: "You won't be able to revert this!",
+          icon: "warning",
+          showCancelButton: true,
+          confirmButtonColor: "#3085d6",
+          cancelButtonColor: "#d33",
+          confirmButtonText: "Yes, delete it!",
+        })
+        .then((result) => {
+          if (result.isConfirmed) {
+            this.deleteGoogleAccount(data.id)
+              .then((response) => {
+                if (response.data.status == true) {
+                  this.$swal.fire(
+                    "Deleted!",
+                    "Account has been deleted.",
+                    "success"
+                  );
+                }
+              })
+              .catch((error) => {
+                this.toast.error(error.response.data.message);
+              });
+          }
+        });
+    },
+    deleteGoAweber(data) {
+      this.$swal
+        .fire({
+          title: "Are you sure?",
+          text: "You won't be able to revert this!",
+          icon: "warning",
+          showCancelButton: true,
+          confirmButtonColor: "#3085d6",
+          cancelButtonColor: "#d33",
+          confirmButtonText: "Yes, delete it!",
+        })
+        .then((result) => {
+          if (result.isConfirmed) {
+            this.deleteAweberAccount(data.id)
+              .then((response) => {
+                if (response.data.status == true) {
+                  this.$swal.fire(
+                    "Deleted!",
+                    "Account has been deleted.",
+                    "success"
+                  );
+                }
+              })
+              .catch((error) => {
+                this.toast.error(error.response.data.message);
+              });
+          }
+        });
+    },
+    editgohighlevel(data) {
+      this.modaltitle =
+        "Allow ZapDepot to access your Ready Funnels Pro Account?";
+      this.gohighlevel = {
+        id: data.id,
+        label: data.label,
+        // location_id:data.location_id,
+        api_key: data.api_key,
+      };
+      this.showgohilevel = true;
+      this.v$.gohighlevel.$reset();
+    },
+    addgohilevel() {
+      this.v$.gohighlevel.$touch();
+      if (this.v$.gohighlevel.$invalid) {
+        return;
+      }
+      let domain_url = "https://zapdepot.io/integration/add/gohighlevel";
+      // let domain_url = window.location.origin + '/integration/add/gohighlevel';
+      let redirect_url =
+        "https://marketplace.gohighlevel.com/oauth/chooselocation?response_type=code&redirect_uri=" +
+        domain_url +
+        "&client_id=62256ce0688c9632a80d915b-l0ghgtys&scope=contacts.write contacts.readonly conversations/message.readonly conversations/message.write users.write campaigns.readonly campaigns.readonly&state=ready_funnels_pro";
+      window.location.href = redirect_url;
+      // this.v$.gohighlevel.$touch();
+      // if (this.v$.gohighlevel.$invalid) {
+      //     return;
+      // }
+      // this.loader = true;
+      // this.addAccountGo(this.gohighlevel)
+      // .then(() => {
+      //     this.showgohilevel = false;
+      //     this.loader = false;
+      //     this.toast.success(
+      //         "Account added successfully."
+      //     );
+      // })
+      // .catch((error) => {
+      //     this.loader = false;
+      //     console.log(error.response);
+      //     this.toast.error(error.response.data.message);
+      // });
+    },
+    deletgohighlevel(id, type) {
+      this.$swal
+        .fire({
+          title: "Are you sure?",
+          text: "You won't be able to revert this!",
+          icon: "warning",
+          showCancelButton: true,
+          confirmButtonColor: "#3085d6",
+          cancelButtonColor: "#d33",
+          confirmButtonText: "Yes, delete it!",
+        })
+        .then((result) => {
+          if (result.isConfirmed) {
+            let data = {
+              id: id,
+              type: type,
+            };
+            this.deleteGohighaccount(data)
+              .then((response) => {
+                if (response.data.status == true) {
+                  this.$swal.fire(
+                    "Deleted!",
+                    "Account has been deleted.",
+                    "success"
+                  );
+                }
+              })
+              .catch((error) => {
+                this.toast.error(error.response.data.message);
+              });
+          }
+        });
+    },
+    deletwebinar(id, type) {
+      this.$swal
+        .fire({
+          title: "Are you sure?",
+          text: "You won't be able to revert this!",
+          icon: "warning",
+          showCancelButton: true,
+          confirmButtonColor: "#3085d6",
+          cancelButtonColor: "#d33",
+          confirmButtonText: "Yes, delete it!",
+        })
+        .then((result) => {
+          if (result.isConfirmed) {
+            let data = {
+              id: id,
+              type: type,
+            };
+            this.deleteWebinarSingle(data)
+              .then((response) => {
+                if (response.data.status == true) {
+                  this.$swal.fire(
+                    "Deleted!",
+                    "Account has been deleted.",
+                    "success"
+                  );
+                }
+              })
+              .catch((error) => {
+                this.toast.error(error.response.data.message);
+              });
+          }
+        });
+    },
+    addactive() {
+      this.v$.activeCam.$touch();
+      if (this.v$.activeCam.$invalid) {
+        return;
+      }
+      this.loader = true;
+      this.addActiveCamAccount(this.activeCam)
+        .then(() => {
+          this.showactive = false;
+          this.loader = false;
+          this.toast.success("Acitve campaign account added successfully.");
+        })
+        .catch((error) => {
+          this.loader = false;
+          this.toast.error(error.response.data.message);
+        });
+    },
+    async getgoaccounts() {
+      this.loader = true;
+      await this.setAllGohighlevel()
+        .then(() => {
+          this.loader = false;
+        })
+        .catch(() => {
+          this.loader = false;
+        });
+    },
+    async getAcitveaccounts() {
+      this.loader = true;
+      await this.setAllActiveCamAccounts()
+        .then(() => {
+          this.loader = false;
+        })
+        .catch(() => {
+          this.loader = false;
+        });
+    },
+    async getgosingle() {
+      this.loader = true;
+      await this.setAllGohighlevelSingle()
+        .then(() => {
+          this.loader = false;
+        })
+        .catch(() => {
+          this.loader = false;
+        });
+    },
+    editActivelevel(data) {
+      this.modaltitle = "Allow ZapDepot to access your ActiveCampaign Account?";
+      this.activeCam = {
+        id: data.id,
+        label: data.label,
+        api_url: data.api_url,
+        api_key: data.api_key,
+      };
+      this.showactive = true;
+      this.v$.activeCam.$reset();
+    },
+    deleteActiveCampaign(id) {
+      this.$swal
+        .fire({
+          title: "Are you sure?",
+          text: "You won't be able to revert this!",
+          icon: "warning",
+          showCancelButton: true,
+          confirmButtonColor: "#3085d6",
+          cancelButtonColor: "#d33",
+          confirmButtonText: "Yes, delete it!",
+        })
+        .then((result) => {
+          if (result.isConfirmed) {
+            this.deleteActiveAccount(id)
+              .then((response) => {
+                if (response.data.status == true) {
+                  this.$swal.fire(
+                    "Deleted!",
+                    "Account has been deleted.",
+                    "success"
+                  );
+                }
+              })
+              .catch((error) => {
+                this.toast.error(error.response.data.message);
+              });
+          }
+        });
+    },
+    addgohilevelsingle() {
+      this.v$.gohighlevelSingle.$touch();
+      if (this.v$.gohighlevelSingle.$invalid) {
+        return;
+      }
+      let domain_url = window.location.origin + "/integration/add/gohighlevel";
+      let redirect_url =
+        "https://marketplace.gohighlevel.com/oauth/chooselocation?response_type=code&redirect_uri=" +
+        domain_url +
+        "&client_id=62256ce0688c9632a80d915b-l0ghgtys&scope=contacts.write contacts.readonly conversations/message.readonly conversations/message.write users.write campaigns.readonly campaigns.readonly&state=gohighlevel";
+      window.location.href = redirect_url;
+    },
+    connectWithAWeber() {
+      this.v$.aweber.$touch();
+      if (this.v$.aweber.$invalid) {
+        return;
+      }
+      let redirect_uri = "http://localhost:8080/integration/add/aweber";
+      var url =
+        "https://auth.aweber.com/oauth2/authorize?response_type=code&client_id=0alKdCUBpyz9V4hlGOeh6XsLv160JC4H&redirect_uri=" +
+        redirect_uri +
+        "&scope=account.read list.read list.write subscriber.read subscriber.write email.read email.write subscriber.read-extended landing-page.read&state=" +
+        this.aweber.label;
+      window.location.href = url;
+    },
+    redirectToGotowebinar() {
+      let domain_url = window.location.origin + "/integration/add/gotowebinar";
+      // let domain_url = "http://127.0.0.1:8000/api/integration/add/gotowebinar";
+      let redirect_url = `https://api.getgo.com/oauth/v2/authorize?client_id=2cbf7ce6-09ae-4106-a391-6df9a4dac8c3&response_type=code&redirect_uri=${domain_url}`;
+      window.location.href = redirect_url;
+    },
+
+    redirectToGoogleAccount() {
+      this.v$.google.$touch();
+      if (this.v$.google.$invalid) {
+        return;
+      }
+      this.loader = true;
+      let domain_url =
+        window.location.origin + "/integration/add/googleAccount";
+      this.google.url = domain_url;
+      this.connectToGoogleAccount(this.google)
+        .then((resp) => {
+          if (resp.data.status) {
+            this.loader = false;
+            window.location.href = resp.data.data;
+          } else {
+            this.loader = false;
+
+            this.toast.error(resp.data.message);
+          }
+        })
+        .catch((errors) => {
+          this.loader = false;
+          console.log(errors);
+        });
+    },
+  },
+  async created() {
+    this.getgoaccounts();
+    this.getAcitveaccounts();
+    this.getgosingle();
+    this.getAllWebinarData();
+    this.getAllGoogleDATA();
+    this.getAllAweberAccounts();
+  },
 };
 </script>
 

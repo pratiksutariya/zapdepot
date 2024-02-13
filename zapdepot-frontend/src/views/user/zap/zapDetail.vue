@@ -379,7 +379,7 @@
                               />
                               <AWeber
                                 v-if="zap.sender_name == 'aweber'"
-                                :getWebinarsAccounts="getWebinarsAccounts"
+                                :getAweberAccounts="getAllAweber"
                                 :selected_account_id="zap.sender_id"
                                 event_type="trigger"
                                 :action_type="zap.sender_action_type"
@@ -643,7 +643,7 @@
                                     <div
                                       class="logo-box-one ml-2"
                                       :class="
-                                        zap.sender_name == 'aweber'
+                                        zap.receiver_name == 'aweber'
                                           ? 'active'
                                           : ''
                                       "
@@ -714,6 +714,16 @@
                                @set_tag_list_id="set_tag_list_id"
                                @set_account_id="set_account_id"
                               />
+                              <AWeber
+                                v-if="zap.receiver_name == 'aweber'"
+                                :getAweberAccounts="getAllAweber"
+                                :selected_account_id="zap.receiver_id"
+                                event_type="action"
+                                :action_type="zap.sender_action_type"
+                                :selected_tag_list_id="zap.receiver_tag_list_id"
+                                @set_tag_list_id="set_tag_list_id"
+                                @set_account_id="set_account_id"
+                              />
                               <!-- <webHook
                                v-if="zap.receiver_name == 'web_hook'"
                                :allGoogleAccounts="allGoogleAccounts"
@@ -772,7 +782,7 @@
 <script>
 import _ from "lodash";
 import { defineComponent } from "vue";
-import { mapGetters, mapActions } from "vuex";
+import { mapGetters, mapActions, mapState } from "vuex";
 import GoHighLevel from "@/components/integration/gohighlevel.vue";
 import ActiveCampaign from "@/components/integration/activeCampaign.vue";
 import GoHighLevelSingle from "@/components/integration/gohighlevelSingle.vue";
@@ -827,6 +837,7 @@ export default defineComponent({
       allGoogleAccounts: "integration/getGoogleAccounts",
       // getWebHookurl: "integration/getWebHookurl",
     }),
+    ...mapState("integration", ["getAllAweber"]),
     sender_active_tab(){
       if(this.zap.sender_name == 'gohighlevel_single')
       {
@@ -871,6 +882,7 @@ export default defineComponent({
       setgohilevelAccountSingle: "integration/setAllGohilevelAccountsSingle",
       setActiveCamAccounts: "integration/getAllActiveCamAccounts",
       setAllWebinarData: "integration/getAllWebinarData",
+      getAllAweberAccounts: "integration/getAllAweberAc",
       getAllGoogleDATA: "integration/getAllGoogleDATA",
       // getWebHook: "integration/getWebHook"
     }),
@@ -913,6 +925,9 @@ export default defineComponent({
           }else if (this.zap.sender_name == "web_hook") {
             this.showTrigger = true;
             // this.getAllGoogleAccounts();
+          }else if (this.zap.sender_name == "aweber") {
+            this.showTrigger = true;
+            this.getAllAweberAccountData();
           }
           if (this.zap.receiver_name == "gohighlevel") {
             this.showAction = true;
@@ -929,6 +944,9 @@ export default defineComponent({
           } else if (this.zap.receiver_name == "google_sheet") {
             this.showAction = true;
             this.getAllGoogleAccounts();
+          }else if (this.zap.receiver_name == "aweber") {
+            this.showAction = true;
+            this.getAllAweberAccountData();
           }
         })
         .catch(() => {
@@ -950,6 +968,8 @@ export default defineComponent({
         this.getAllWebinarAccountData();
       } else if (data == "google_sheet") {
         this.getAllGoogleAccounts();
+      } else if (data == "aweber") {
+        this.getAllAweberAccountData();
       }
     },
     set_receiver(data) {
@@ -967,6 +987,8 @@ export default defineComponent({
         this.getAllWebinarAccountData();
       } else if (data == "google_sheet") {
         this.getAllGoogleAccounts();
+      } else if (data == "aweber") {
+        this.getAllAweberAccountData();
       }
     },
     getGohighlevelAccouts() {
@@ -1009,6 +1031,16 @@ export default defineComponent({
           this.loader = false;
         });
     },
+    getAllAweberAccountData() {
+      this.loader = true;
+      this.getAllAweberAccounts()
+        .then(() => {
+          this.loader = false;
+        })
+        .catch(() => {
+          this.loader = false;
+        });
+    },
     getAllGoogleAccounts() {
       this.loader = true;
       this.getAllGoogleDATA()
@@ -1023,6 +1055,7 @@ export default defineComponent({
       // console.log(data,"dadadad");
       if (data.event_type == "trigger") {
         // console.log("trigger",data.tag_list_id);
+        alert(data)
         this.zap.sender_tag_list_id = data.tag_list_id;
       } else {
         // console.log("tag_list_id",data.tag_list_id);

@@ -76,6 +76,7 @@ Route::group(['middleware' => 'auth:api'], function () {
         Route::get('get-zap/{id}', 'getZap');
         Route::get('get-all-logs','GetContact');
         Route::get('get-zap-logs/{id}','getZapsLogs');
+        Route::get('clear-all-logs','clear_zap_log');
     });
 });
 

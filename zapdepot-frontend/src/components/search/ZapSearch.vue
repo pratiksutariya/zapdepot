@@ -19,10 +19,15 @@
             </select>
           </div>
           <div>
-            <button @click="resetData()" class=" btn btn-outline-primary">
+            <!-- <button @click="resetData()" class=" btn btn-outline-primary">
               <i class="mr-2 nav-icon fas fa-refresh"></i>
               Reset
-            </button>
+            </button> -->
+            <div class="mr-2" role="group" aria-label="First group">
+              <button type="button" data-toggle="tooltip" data-placement="top" title="Fetch All Logs" class="btn btn-secondary " @click="resetData()"><i class="nav-icon fas fa-refresh"></i></button>
+              <button type="button" class="btn btn-secondary ml-2" title="Clear All Logs" @click="clearLogs()"><i class="nav-icon fas fa-trash"></i></button>
+              <button type="button" class="btn btn-secondary ml-2" title="Error All Logs" @click="go_to_error_log()"><i class="nav-icon fas fa-ban"></i></button>
+            </div>
           </div>
         </div>
       </div>
@@ -48,7 +53,14 @@ export default {
     resetData() {
       this.account_id = '';
       this.$emit('filterzap',this.account_id)
+    },
+    clearLogs() {
+      this.$emit('clear-zap-log',this.account_id)
+    },
+    go_to_error_log() {
+      this.$router.push({ name: "ErrorLog" });
     }
   },
 };
 </script>
+

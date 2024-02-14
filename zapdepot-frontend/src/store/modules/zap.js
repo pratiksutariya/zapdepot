@@ -45,6 +45,14 @@ const actions = {
         }
         return resp;
     },
+
+    async clearZapLog({ dispatch }, data) {
+        let resp = await axios.get('/api/clear-all-logs')
+        if (resp.data.status == true) {
+            dispatch("logsGet",data)
+        }
+        return resp;
+    },
     // eslint-disable-next-line no-empty-pattern
     async addZap({}, data) {
         let resp = await axios.post('/api/add-zap', data)

@@ -309,7 +309,7 @@ class Zapcontroller extends BaseController
                 // 'DATE("d-m-Y H:i a",strtotime("contacts.created_at"))as date')
                 
                 )->orderBy('id', 'DESC')->paginate(20);
-            if($request->search) {
+            if($request->search != "null" && $request->search && $request->search != null) {
                 $search = $request->search;
                 $data = Contacts::leftJoin("zaps","zaps.id","=","contacts.zap_id")->where('contacts.user_id',Auth::id())->select("contacts.*",
                 // DB::raw(
@@ -327,6 +327,16 @@ class Zapcontroller extends BaseController
         try {
           $data = Zaplog::where('zap_id' , $id)->latest()->paginate(10);
           return $this->sendResponse($data, 'success.', 200);
+        } catch (\Throwable $e) {
+            return $this->sendError('Internal Server Error.', $e->getMessage(), 500);
+        }
+    }
+
+    public function clear_zap_log() {
+        try {
+          $user_id = Auth::id();
+          Zaplog::where('user_id' , $user_id)->delete();
+          return $this->sendResponse([], 'success.', 200);
         } catch (\Throwable $e) {
             return $this->sendError('Internal Server Error.', $e->getMessage(), 500);
         }

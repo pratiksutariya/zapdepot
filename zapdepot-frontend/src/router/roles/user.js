@@ -2,6 +2,7 @@ import Integration from '@/views/user/integration/integration.vue'
 import Zaps from '@/views/user/zap/index.vue'
 import ZapDetail from '@/views/user/zap/zapDetail.vue'
 import Log from '@/views/user/zap/log.vue'
+import ErrorLog from '@/views/user/zap/ErrorLog.vue'
 import LogLists from '@/views/user/zap/logs.vue'
 import GoAdd from '@/views/user/integration/integrationAdd.vue'
 
@@ -36,6 +37,15 @@ export default [{
         path: '/zaps-log',
         name: 'Log',
         component: Log,
+        meta: {
+            requiresAuth: true,
+            isUser: true
+        },
+    },
+    {
+        path: '/zaps-error-logs',
+        name: 'ErrorLog',
+        component: ErrorLog,
         meta: {
             requiresAuth: true,
             isUser: true

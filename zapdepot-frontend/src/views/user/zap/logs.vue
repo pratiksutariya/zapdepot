@@ -47,11 +47,13 @@ export default defineComponent({
     return {
       loader: false,
       moment : moment,
+      timer : null
     };
   },
   components: {},
   mounted() {
     this.fetchZapLogs(this.id)
+    
   },
   computed: {
     ...mapState('zap' , ['zapLog'])

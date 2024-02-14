@@ -25,7 +25,7 @@
             </button> -->
             <div class="mr-2" role="group" aria-label="First group">
               <button type="button" data-toggle="tooltip" data-placement="top" title="Fetch All Logs" class="btn btn-secondary " @click="resetData()"><i class="nav-icon fas fa-refresh"></i></button>
-              <button type="button" class="btn btn-secondary ml-2" title="Clear All Logs" @click="clearLogs()"><i class="nav-icon fas fa-trash"></i></button>
+              <!-- <button type="button" class="btn btn-secondary ml-2" title="Clear All Logs" @click="clearLogs()"><i class="nav-icon fas fa-trash"></i></button> -->
               <button type="button" class="btn btn-secondary ml-2" title="Error All Logs" @click="go_to_error_log()"><i class="nav-icon fas fa-ban"></i></button>
             </div>
           </div>

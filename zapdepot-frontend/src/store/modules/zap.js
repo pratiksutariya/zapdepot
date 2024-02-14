@@ -4,6 +4,7 @@ const state = {
     getZapAll: [],
     getZapLog: [],
     zapLog: [],
+    errorLog: [],
 };
 
 
@@ -17,6 +18,9 @@ const mutations = {
     },
     SET_ZAP_SINGLE_LOG(state , value) {
         state.zapLog = value
+    },
+    SET_ZAP_ERROR_LOG(state , value) {
+        state.errorLog = value
     }
 }
 
@@ -42,6 +46,22 @@ const actions = {
         let resp = await axios.get('/api/get-all-logs' + data.parmas)
         if (resp.data.status == true) {
             commit('SET_ZAP_LOG', resp.data.data)
+        }
+        return resp;
+    },
+
+    async errorLog({ commit }, data) {
+        let resp = await axios.get('/api/error-log-list' + data.parmas)
+        if (resp.data.status == true) {
+            commit('SET_ZAP_ERROR_LOG', resp.data.data)
+        }
+        return resp;
+    },
+
+    async clearErrorLog({ dispatch }, data) {
+        let resp = await axios.get('/api/clear-error-log-list')
+        if (resp.data.status == true) {
+            dispatch('errorLog' , data)
         }
         return resp;
     },

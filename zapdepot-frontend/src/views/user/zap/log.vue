@@ -38,6 +38,9 @@
                       ></zapSearch>
                     </div>
                   </div>
+                  <div class="col-md-6 text-right">
+                    Refresh Logs In <span> 00 </span> : <span> {{ timerCount }}</span> Seconds
+                  </div>
                 </div>
                 <hr />
                 <!-- /.card-header -->
@@ -116,7 +119,38 @@ export default defineComponent({
       page: 1,
       search: null,
       ZapAllData: "",
+      timerEnabled: true,
+      timerCount: 20,
     };
+  },
+  watch: {
+    timerEnabled(value) {
+      if (value) {
+        setTimeout(() => {
+          this.timerCount--;
+        }, 1000);
+      } else {
+        this.getAll({ parmas: `?page=${this.page}` }).then((resp) => {
+          if (resp.data.status) {
+            this.timerEnabled = true;
+            this.timerCount = 20;
+          }
+        });
+      }
+    },
+
+    timerCount: {
+      handler(value) {
+        if (value > 0 && this.timerEnabled) {
+          setTimeout(() => {
+            this.timerCount--;
+          }, 1000);
+        } else {
+          this.timerEnabled = false;
+        }
+      },
+      immediate: true, // This ensures the watcher is triggered upon creation
+    },
   },
   computed: {
     ...mapGetters({}),
@@ -160,6 +194,10 @@ export default defineComponent({
   },
   mounted() {
     this.getAll({ parmas: `?page=${this.page}` });
+    // this.timer = setInterval(() => {
+    //   // this.countDown()
+    //   // alert(1);
+    // }, 1000);
   },
 });
 </script>

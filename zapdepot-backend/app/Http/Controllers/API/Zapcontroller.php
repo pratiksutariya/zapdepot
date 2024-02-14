@@ -7,6 +7,7 @@ use App\Models\Zap;
 use App\Models\ZapDetail;
 use App\Models\Contacts;
 use App\Models\Zaplog;
+use App\Models\ErrorLog;
 use Auth;
 use Illuminate\Http\Request;
 use Validator;
@@ -336,6 +337,26 @@ class Zapcontroller extends BaseController
         try {
           $user_id = Auth::id();
           Zaplog::where('user_id' , $user_id)->delete();
+          return $this->sendResponse([], 'success.', 200);
+        } catch (\Throwable $e) {
+            return $this->sendError('Internal Server Error.', $e->getMessage(), 500);
+        }
+    }
+
+    public function get_error_log() {
+        try {
+          $user_id = Auth::id();
+          $data = ErrorLog::where('user_id' , $user_id)->latest()->paginate(25);
+          return $this->sendResponse($data, 'success.', 200);
+        } catch (\Throwable $e) {
+            return $this->sendError('Internal Server Error.', $e->getMessage(), 500);
+        }
+    }
+
+    public function clear_error_log() {
+        try {
+          $user_id = Auth::id();
+          ErrorLog::where('user_id' , $user_id)->delete();
           return $this->sendResponse([], 'success.', 200);
         } catch (\Throwable $e) {
             return $this->sendError('Internal Server Error.', $e->getMessage(), 500);

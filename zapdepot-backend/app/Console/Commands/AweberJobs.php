@@ -65,18 +65,18 @@ class AweberJobs extends Command
                             $senddata['email']=$entry->email;
                             $senddata['receiver_id']=$zap->receiver_id;
                             $senddata['zap_id']=$zap->id;
-                            $senddata['phone']= connectionKey()['set_mobile_no'];
+                            // $senddata['phone']= connectionKey()['set_mobile_no'];
                             if($zap->receiver_name=='webinar_account'){
                                 WebinarAccount($senddata);
                             }else if($zap->receiver_name=='gohighlevel'){
                                 goHighLevel($senddata);
-                                $senddata['phone']='';
+                                // $senddata['phone']='';
                             }else if($zap->receiver_name=='active_campaign'){
                                 ActiveCampign($senddata);
-                                $senddata['phone']='';
+                                // $senddata['phone']='';
                             }elseif($zap->receiver_name=='gohighlevel_single'){
                                 GohighlevelSingle($senddata);
-                                $senddata['phone']='';
+                                // $senddata['phone']='';
                             }if($zap->receiver_name=='google_sheet'){
                                 GoogleSheet($senddata);
                             }if($zap->receiver_name=='aweber'){

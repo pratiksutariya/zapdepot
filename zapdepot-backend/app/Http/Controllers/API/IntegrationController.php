@@ -962,6 +962,7 @@ class IntegrationController extends BaseController
                     $access_options = connectIntegration($url,$headers,$method,$data);
                     if($access_options && $access_options['status'] == true && $access_options['status_code'] == 200) {
                         $res_data_entries = $access_options['result']->entries;
+                        // dump($res_data_entries);
                         foreach($res_data_entries as $key => $entry) {
                             $sdata = [];
                             $sdata[$key]['name'] = $entry->name;
